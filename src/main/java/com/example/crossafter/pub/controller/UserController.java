@@ -1,15 +1,12 @@
 package com.example.crossafter.pub.controller;
 
 import com.example.crossafter.pub.bean.RespEntity;
-import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.util.DigestUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
