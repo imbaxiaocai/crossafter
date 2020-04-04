@@ -18,7 +18,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     //用户注册
-    @RequestMapping("/register")
+    @RequestMapping(value="/register",produces = "application/json;charset=UTF-8")
     public void register(HttpServletRequest request, HttpServletResponse response) throws IOException{
         //用户唯一校验
         RespEntity respEntity = userService.register(request);
@@ -27,11 +27,17 @@ public class UserController {
         response.getWriter().close();
     }
     //用户登录
-    @RequestMapping("/login")
+    @RequestMapping(value="/login",produces = "application/json;charset=UTF-8")
     public void login (HttpServletRequest request, HttpServletResponse response) throws IOException{
         RespEntity respEntity = userService.login(request);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //aop_test
+    @RequestMapping(value="/aop",produces = "application/json;charset=UTF-8")
+    public void ckt_aop(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        response.getWriter().write("controller method");
         response.getWriter().close();
     }
 }

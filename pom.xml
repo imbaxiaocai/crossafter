@@ -34,6 +34,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- 添加 JSON -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
 		<!-- 添加 redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
