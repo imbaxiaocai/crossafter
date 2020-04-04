@@ -4,6 +4,9 @@ public class RespEntity {
     private int code;
     private String msg;
     private Object data;
+    public RespEntity(){
+
+    }
     public RespEntity(int code,String msg) {
         this.code = code;
         this.msg = msg;

@@ -2,16 +2,18 @@ package com.example.crossafter.pub.utils;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class RedisUtils {
-    private RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     public boolean setToken(String key,String value){
         try{
-            redisTemplate.opsForValue().set(key,value,60*60*24*2);
+            stringRedisTemplate.opsForValue().set(key,value,60*60*24*2, TimeUnit.SECONDS);
             return true;
         }
         catch (Exception e){

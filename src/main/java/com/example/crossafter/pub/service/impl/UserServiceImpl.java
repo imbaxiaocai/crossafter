@@ -1,25 +1,24 @@
 package com.example.crossafter.pub.service.impl;
 
 import com.example.crossafter.pub.bean.RespEntity;
+import com.example.crossafter.pub.bean.Token;
 import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.dao.UserMapper;
 import com.example.crossafter.pub.service.UserService;
 import com.example.crossafter.pub.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService{
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    private RedisUtils redisUtils;
     public RespEntity register(HttpServletRequest request) throws IOException {
         int result;
         User user = new User();
@@ -49,6 +48,7 @@ public class UserServiceImpl implements UserService{
         String msg;
         int result;
         User user = new User();
+        RespEntity respEntity = new RespEntity();
         //非空校验
         if("".equals(request.getParameter("uname"))||"".equals(request.getParameter("upsw"))){
             msg = "登录失败";
@@ -62,15 +62,20 @@ public class UserServiceImpl implements UserService{
                 msg = "登录成功";
                 result = 1;
                 //生成token
-
-                stringRedisTemplate.opsForValue().set(request.getParameter("uname"),"testtoken",2*24*60*60, TimeUnit.SECONDS);
+                Token token = new Token();
+                token.setKey(request.getParameter("uname"));
+                String tkn = token.createToken(request.getParameter("uname"));
+                token.setValue(tkn);
+                redisUtils.setToken(request.getParameter("uname"),tkn);
+                respEntity.setData(token);
             }
             else{
                 msg = "登录失败";
                 result = 0;
             }
         }
-        RespEntity respEntity = new RespEntity(result,msg);
+        respEntity.setCode(result);
+        respEntity.setMsg(msg);
         return respEntity;
     }
 }
