@@ -19,15 +19,9 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
     @Autowired
     private RedisUtils redisUtils;
-    public RespEntity register(HttpServletRequest request) throws IOException {
+    public RespEntity register(User user) throws IOException {
         int result;
-        User user = new User();
-        user.setUname(request.getParameter("uname"));
-        user.setUpsw(DigestUtils.md5DigestAsHex(request.getParameter("upsw").getBytes()));
-        user.setLocation(request.getParameter("location"));
-        user.setPhonenumber(request.getParameter("phonenumber"));
-        user.setID(request.getParameter("ID"));
-        user.setRname(request.getParameter("rname"));
+        user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
         try {
             result = userMapper.addUser(user);
         }
@@ -44,29 +38,28 @@ public class UserServiceImpl implements UserService{
         RespEntity respEntity = new RespEntity(result,msg);
         return respEntity;
     }
-    public RespEntity login(HttpServletRequest request) throws IOException{
+    public RespEntity login(User user) throws IOException{
         String msg;
         int result;
-        User user = new User();
         RespEntity respEntity = new RespEntity();
         //非空校验
-        if("".equals(request.getParameter("uname"))||"".equals(request.getParameter("upsw"))){
+        if("".equals(user.getUname())||"".equals(user.getUpsw())){
             msg = "登录失败";
             result = 0;
         }
         else{
-            user.setUpsw(DigestUtils.md5DigestAsHex(request.getParameter("upsw").getBytes()));
-            user.setUname(request.getParameter("uname"));
+            //登录验证
+            user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
             User u = userMapper.userLogin(user);
             if(user.equals(u)){
                 msg = "登录成功";
                 result = 1;
                 //生成token
                 Token token = new Token();
-                token.setKey(request.getParameter("uname"));
-                String tkn = token.createToken(request.getParameter("uname"));
+                token.setKey(user.getUname());
+                String tkn = token.createToken(user.getUname());
                 token.setValue(tkn);
-                redisUtils.setToken(request.getParameter("uname"),tkn);
+                redisUtils.setToken(user.getUname(),tkn);
                 respEntity.setData(token);
             }
             else{

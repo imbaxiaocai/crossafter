@@ -13,6 +13,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
@@ -22,20 +23,27 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Configuration
 public class CheckToken {
-
     @Pointcut("execution(* ckt_*(..))")
     public void anyRequest(){
     }
     @Around("anyRequest()")
     public void tokenCheck(ProceedingJoinPoint pjp) throws Throwable{
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+        HttpServletRequest request = sra.getRequest();
+        Object[] o = pjp.getArgs();
         RespEntity respEntity = new RespEntity();//resp
         ObjectMapper mapper = new ObjectMapper();
         int code;//响应码
         String msg;//响应信息
         String tknString = request.getParameter("head.token");
-        System.out.println(tknString);
+        System.out.println(JSONObject.fromObject(o[0]));
+        JSONObject jsonObject = JSONObject.fromObject(o[0]);
+        if(jsonObject.containsKey("token")){
+            Token utkn = (Token) JSONObject.toBean(jsonObject.getJSONObject("token"),Token.class);
+        }
         //token在不在
         if(tknString==null||"".equals(tknString)){
             code = -1;
@@ -47,9 +55,7 @@ public class CheckToken {
         }
         //token对不对
         else{
-            JSONObject jsonObject = JSONObject.fromObject(tknString);
-            Token utkn = (Token) JSONObject.toBean(jsonObject,Token.class);
-            System.out.println(utkn);
+
         }
         response.getWriter().write("");
         response.getWriter().close();
