@@ -17,10 +17,19 @@ import java.io.IOException;
 public class UserController {
     @Autowired
     private UserService userService;
+    //用户注册
     @RequestMapping("/register")
-    public void addUser(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    public void register(HttpServletRequest request, HttpServletResponse response) throws IOException{
         //用户唯一校验
         RespEntity respEntity = userService.register(request);
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //用户登录
+    @RequestMapping("/login")
+    public void login (HttpServletRequest request, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = userService.login(request);
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();

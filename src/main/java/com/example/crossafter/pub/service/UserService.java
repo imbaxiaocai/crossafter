@@ -7,4 +7,5 @@ import java.io.IOException;
 
 public interface UserService {
     RespEntity register(HttpServletRequest request) throws IOException;
+    RespEntity login(HttpServletRequest request) throws IOException;
 }

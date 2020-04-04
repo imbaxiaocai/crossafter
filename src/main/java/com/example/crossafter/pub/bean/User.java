@@ -64,4 +64,13 @@ public class User {
     public void setLocation(String location) {
         this.location = location;
     }
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof User){
+            if(((User) obj).uname.equals(this.uname)&&((User) obj).upsw.equals(this.upsw)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

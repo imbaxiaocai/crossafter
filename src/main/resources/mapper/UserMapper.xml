@@ -4,4 +4,7 @@
     <insert id="addUser" parameterType="com.example.crossafter.pub.bean.User">
         INSERT INTO user (uname,upsw,rname,ID,phonenumber,location) VALUES (#{uname},#{upsw},#{rname},#{ID},#{phonenumber},#{location})
     </insert>
+    <select id="userLogin" parameterType="com.example.crossafter.pub.bean.User" resultType="com.example.crossafter.pub.bean.User">
+        SELECT * FROM user WHERE uname=#{uname} AND upsw=#{upsw}
+    </select>
 </mapper>
