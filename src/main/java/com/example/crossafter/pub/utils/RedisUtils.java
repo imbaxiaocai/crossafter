@@ -21,13 +21,14 @@ public class RedisUtils {
         }
         return false;
     }
-    public boolean getToken(String key){
+    public String getToken(String key){
+        String value = "";
         try{
-
+            value = stringRedisTemplate.opsForValue().get(key);
         }
         catch (Exception e){
-
+            e.printStackTrace();
         }
-        return false;
+        return value;
     }
 }
