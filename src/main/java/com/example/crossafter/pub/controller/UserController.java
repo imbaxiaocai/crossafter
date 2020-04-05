@@ -38,7 +38,7 @@ public class UserController {
     }
     //aop_test
     @RequestMapping(value="/aop",produces = "application/json;charset=UTF-8")
-    public void ckt_aop(@RequestBody User user, HttpServletResponse response) throws IOException{
+    public void ckt_aop(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         response.getWriter().write("controller method");
         response.getWriter().close();
     }

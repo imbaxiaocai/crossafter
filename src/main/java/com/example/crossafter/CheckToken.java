@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 @Configuration
 public class CheckToken {
+    @Autowired
+    RedisUtils redisUtils;
     @Pointcut("execution(* ckt_*(..))")
     public void anyRequest(){
     }
@@ -53,7 +55,7 @@ public class CheckToken {
             //token存在
             if (jsonObject.containsKey("token")) {
                 Token utkn = (Token) JSONObject.toBean(jsonObject.getJSONObject("token"), Token.class);
-                RedisUtils redisUtils = new RedisUtils();
+               // System.out.println(utkn.getKey() + "hahahah"+ utkn.getValue());
                 String uval = utkn.getValue();
                 String sysval = redisUtils.getToken(utkn.getKey());
                 //token校验通过
