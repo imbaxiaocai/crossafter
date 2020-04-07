@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService{
             }
         }
         catch (Exception e){
+            e.printStackTrace();
             respEntity.setHead(RespHead.SYS_ERROE);
             return respEntity;
         }
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService{
                 }
             }
             catch (Exception e){
+                e.printStackTrace();
                 respEntity.setHead(RespHead.SYS_ERROE);
                 return  respEntity;
             }

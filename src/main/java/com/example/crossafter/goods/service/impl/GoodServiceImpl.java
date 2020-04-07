@@ -22,6 +22,7 @@ public class GoodServiceImpl implements GoodService{
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
+            e.printStackTrace();
             respEntity.setHead(RespHead.SYS_ERROE);
             return  respEntity;
         }

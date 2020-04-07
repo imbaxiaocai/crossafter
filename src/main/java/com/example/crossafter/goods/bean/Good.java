@@ -2,7 +2,7 @@ package com.example.crossafter.goods.bean;
 
 import com.example.crossafter.pub.bean.Token;
 
-public class Good extends Token{
+public class Good{
     private int gid;
     private String gname;
     private int fid;
