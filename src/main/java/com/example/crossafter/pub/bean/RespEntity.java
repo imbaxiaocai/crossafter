@@ -17,7 +17,10 @@ public class RespEntity {
         this.msg = msg;
         this.data = data;
     }
-
+    public RespEntity(RespHead rh){
+        this.code = rh.getCode();
+        this.msg = rh.getMsg();
+    }
     public int getCode() {
         return code;
     }
@@ -40,5 +43,9 @@ public class RespEntity {
 
     public void setData(Object data) {
         this.data = data;
+    }
+    public void setHead(RespHead rh){
+        this.code = rh.getCode();
+        this.msg = rh.getMsg();
     }
 }

@@ -1,6 +1,7 @@
 package com.example.crossafter.pub.service.impl;
 
 import com.example.crossafter.pub.bean.RespEntity;
+import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.Token;
 import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.dao.UserMapper;
@@ -21,54 +22,52 @@ public class UserServiceImpl implements UserService{
     private RedisUtils redisUtils;
     public RespEntity register(User user) throws IOException {
         int result;
-        user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
+        RespEntity respEntity = new RespEntity();
         try {
+            user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
             result = userMapper.addUser(user);
+            if(result==1){
+                respEntity.setHead(RespHead.SUCCESS);
+            }
+            else {
+                respEntity.setHead(RespHead.FAILED);
+            }
         }
         catch (Exception e){
-            result = 0;
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
         }
-        String msg;
-        if(result==1){
-            msg = "注册成功";
-        }
-        else {
-            msg = "注册失败";
-        }
-        RespEntity respEntity = new RespEntity(result,msg);
         return respEntity;
     }
     public RespEntity login(User user) throws IOException{
-        String msg;
-        int result;
         RespEntity respEntity = new RespEntity();
         //非空校验
         if("".equals(user.getUname())||"".equals(user.getUpsw())){
-            msg = "登录失败";
-            result = 0;
+            respEntity.setHead(RespHead.FAILED);
         }
         else{
             //登录验证
-            user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
-            User u = userMapper.userLogin(user);
-            if(user.equals(u)){
-                msg = "登录成功";
-                result = 1;
-                //生成token
-                Token token = new Token();
-                token.setKey(user.getUname());
-                String tkn = token.createToken(user.getUname());
-                token.setValue(tkn);
-                redisUtils.setToken(user.getUname(),tkn);
-                respEntity.setData(token);
+            try {
+                user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
+                User u = userMapper.userLogin(user);
+                if (user.equals(u)) {
+                    respEntity.setHead(RespHead.SUCCESS);
+                    //生成token
+                    Token token = new Token();
+                    token.setKey(user.getUname());
+                    String tkn = token.createToken(user.getUname());
+                    token.setValue(tkn);
+                    redisUtils.setToken(user.getUname(), tkn);
+                    respEntity.setData(token);
+                } else {
+                    respEntity.setHead(RespHead.FAILED);
+                }
             }
-            else{
-                msg = "登录失败";
-                result = 0;
+            catch (Exception e){
+                respEntity.setHead(RespHead.SYS_ERROE);
+                return  respEntity;
             }
         }
-        respEntity.setCode(result);
-        respEntity.setMsg(msg);
         return respEntity;
     }
 }

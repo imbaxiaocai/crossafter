@@ -1,6 +1,6 @@
 package com.example.crossafter.pub.bean;
 
-public class User {
+public class User extends Token{
     private int uid;
     private String uname;
     private String upsw;

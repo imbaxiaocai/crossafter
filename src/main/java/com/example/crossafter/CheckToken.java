@@ -1,6 +1,7 @@
 package com.example.crossafter;
 
 import com.example.crossafter.pub.bean.RespEntity;
+import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.Token;
 import com.example.crossafter.pub.utils.RedisUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,21 +32,14 @@ public class CheckToken {
     }
     @Around("anyRequest()")
     public void tokenCheck(ProceedingJoinPoint pjp) throws Throwable{
-        //HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         //获取拦截方法入参
         HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        //RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-        //ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-        //HttpServletRequest request = sra.getRequest();
         Object[] obs = pjp.getArgs();
         RespEntity respEntity = new RespEntity();//resp
         ObjectMapper mapper = new ObjectMapper();
-        int code;//响应码
-        String msg;//响应信息
         //参数是否为空
         if(obs[0]==null){
-            code = -2;
-            msg = "请求错误";
+            respEntity.setHead(RespHead.REQ_ERROR);
         }
         //参数非空
         else{
@@ -55,7 +49,6 @@ public class CheckToken {
             //token存在
             if (jsonObject.containsKey("token")) {
                 Token utkn = (Token) JSONObject.toBean(jsonObject.getJSONObject("token"), Token.class);
-               // System.out.println(utkn.getKey() + "hahahah"+ utkn.getValue());
                 String uval = utkn.getValue();
                 String sysval = redisUtils.getToken(utkn.getKey());
                 //token校验通过
@@ -66,18 +59,14 @@ public class CheckToken {
                 }
                 //token不对
                 else {
-                    code = 0;
-                    msg = "非法token";
+                    respEntity.setHead(RespHead.TOKEN_ERROR);
                 }
             }
             //token不在
             else {
-                code = -1;
-                msg = "token不存在";
+                respEntity.setHead(RespHead.TOKEN_ERROR);
             }
         }
-        respEntity.setMsg(msg);
-        respEntity.setCode(code);
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
 
