@@ -23,7 +23,7 @@ public class GoodController {
     private GoodService goodService;
     //获取所有商品信息
     @RequestMapping("/getAll")
-    public void getAll(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+    public void ckt_getAll(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         RespEntity respEntity = goodService.getAllGoods();
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(respEntity));
