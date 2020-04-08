@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.crossafter.Retailer.dao.TrolleyMapper">
+    <insert id="addToTrolley" parameterType="com.example.crossafter.Retailer.bean.Trolley">
+        INSERT INTO  trolley(uid,gid,amount) VALUES (#{uid},#{gid},1);
+    </insert>
+    <delete id="deleteFromTro" parameterType="com.example.crossafter.Retailer.bean.Trolley">
+        DELETE FROM trolley WHERE gid=#{gid} AND uid=#{uid}
+    </delete>
+    <select id="getTroByUid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.Trolley">
+        SELECT * FROM trolley WHERE uid=#{uid}
+    </select>
+    <select id="getTroByGid" parameterType="com.example.crossafter.Retailer.bean.Trolley" resultType="com.example.crossafter.Retailer.bean.Trolley">
+        SELECT * FROM trolley WHERE gid=#{gid} AND uid=#{uid}
+    </select>
+    <update id="plus" parameterType="com.example.crossafter.Retailer.bean.Trolley">
+        UPDATE trolley SET amount = amount+1 WHERE gid=#{gid} AND uid=#{uid}
+    </update>
+    <update id="sub" parameterType="com.example.crossafter.Retailer.bean.Trolley">
+        UPDATE trolley SET amount = amount-1 WHERE gid=#{gid} AND uid=#{uid}
+    </update>
+</mapper>

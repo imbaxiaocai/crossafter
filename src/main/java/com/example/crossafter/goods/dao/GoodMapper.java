@@ -12,4 +12,5 @@ import java.util.List;
 @Mapper
 public interface GoodMapper {
     List<Good> getAllGoods();
+    Good getGoodById(int uid);
 }
