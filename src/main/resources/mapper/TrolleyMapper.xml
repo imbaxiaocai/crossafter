@@ -10,7 +10,7 @@
     <select id="getTroByUid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.Trolley">
         SELECT * FROM trolley WHERE uid=#{uid}
     </select>
-    <select id="getTroByGid" parameterType="com.example.crossafter.Retailer.bean.Trolley" resultType="com.example.crossafter.Retailer.bean.Trolley">
+    <select id="getTroById" parameterType="com.example.crossafter.Retailer.bean.Trolley" resultType="com.example.crossafter.Retailer.bean.Trolley">
         SELECT * FROM trolley WHERE gid=#{gid} AND uid=#{uid}
     </select>
     <update id="plus" parameterType="com.example.crossafter.Retailer.bean.Trolley">

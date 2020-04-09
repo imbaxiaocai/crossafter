@@ -14,7 +14,7 @@ public interface TrolleyMapper {
     int addTotrolley(Trolley trolley);
     int deleteFromTro(Trolley trolley);
     List<Trolley> getTroByUid(int uid);
-    Trolley getTroByGid(Trolley trolley);
+    Trolley getTroById(Trolley trolley);
     int plus(Trolley trolley);
     int sub(Trolley trolley);
 }

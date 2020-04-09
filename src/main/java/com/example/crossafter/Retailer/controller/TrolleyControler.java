@@ -40,7 +40,52 @@ public class TrolleyControler {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
-    //从购物车删除s
+    //从购物车删除
+    @RequestMapping("/del")
+    public void delFromTrolley(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject json = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(json,"Trolley")){
+            Trolley trolley = (Trolley) JSONObject.toBean(json.getJSONObject("Trolley"),Trolley.class);
+            respEntity = trolleyService.delFromTrolley(trolley);
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
     //数量+1
+    @RequestMapping("/plus")
+    public void pluGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject json = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(json,"Trolley")){
+            Trolley trolley = (Trolley) JSONObject.toBean(json.getJSONObject("Trolley"),Trolley.class);
+            respEntity = trolleyService.pluGood(trolley);
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
     //数量-1
+    @RequestMapping("/sub")
+    public void subGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject json = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(json,"Trolley")){
+            Trolley trolley = (Trolley) JSONObject.toBean(json.getJSONObject("Trolley"),Trolley.class);
+            respEntity = trolleyService.subGood(trolley);
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }
