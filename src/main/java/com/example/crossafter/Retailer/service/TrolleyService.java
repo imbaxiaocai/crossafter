@@ -8,4 +8,6 @@ public interface TrolleyService {
     RespEntity delFromTrolley(Trolley trolley);
     RespEntity pluGood(Trolley trolley);
     RespEntity subGood(Trolley trolley);
+    RespEntity setAmount(Trolley trolley);
+    RespEntity getTrolley(int uid);
 }

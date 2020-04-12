@@ -4,10 +4,11 @@ public class User{
     private int uid;
     private String uname;
     private String upsw;
-    private String rname;
+    private String rname;//真名
     private String ID;
     private String phonenumber;
     private String location;
+    private double wallet;
 
     public int getUid() {
         return uid;
@@ -72,5 +73,13 @@ public class User{
             }
         }
         return false;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
     }
 }

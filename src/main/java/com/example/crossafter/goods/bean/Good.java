@@ -11,6 +11,7 @@ public class Good{
     private int gsales;
     private int gtype;
     private double sprice;
+    private int duration;
 
     public int getGid() {
         return gid;
@@ -74,5 +75,13 @@ public class Good{
 
     public void setSprice(double sprice) {
         this.sprice = sprice;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 }

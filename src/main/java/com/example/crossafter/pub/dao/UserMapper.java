@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface UserMapper {
     int addUser(User user);
     User userLogin(User user);
+    double getWallet(String uname);
+    int setWallet(User user);
 }

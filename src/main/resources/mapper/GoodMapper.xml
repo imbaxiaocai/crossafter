@@ -7,4 +7,10 @@
     <select id="getGoodById" parameterType="int" resultType="com.example.crossafter.goods.bean.Good">
         SELECT * FROM goods WHERE gid=#{gid}
     </select>
+    <select id="getSprice" parameterType="int" resultType="double">
+        SELECT sprice FROM goods WHERE gid=#{gid}
+    </select>
+    <select id="getDuration" parameterType="int" resultType="int">
+        SELECT duration FROM goods WHERE gid=#{gid}
+    </select>
 </mapper>

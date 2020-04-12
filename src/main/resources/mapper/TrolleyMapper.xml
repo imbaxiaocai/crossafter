@@ -19,4 +19,7 @@
     <update id="sub" parameterType="com.example.crossafter.Retailer.bean.Trolley">
         UPDATE trolley SET amount = amount-1 WHERE gid=#{gid} AND uid=#{uid}
     </update>
+    <update id="setAmount" parameterType="com.example.crossafter.Retailer.bean.Trolley">
+        UPDATE trolley SET amount=#{amount} WHERE gid=#{gid} AND uid=#{uid}
+    </update>
 </mapper>

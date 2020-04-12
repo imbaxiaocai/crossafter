@@ -13,4 +13,6 @@ import java.util.List;
 public interface GoodMapper {
     List<Good> getAllGoods();
     Good getGoodById(int uid);
+    double getSprice(int gid);
+    int getDuration(int gid);
 }

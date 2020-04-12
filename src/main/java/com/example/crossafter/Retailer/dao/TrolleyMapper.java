@@ -11,10 +11,11 @@ import java.util.List;
 @Component
 @Mapper
 public interface TrolleyMapper {
-    int addTotrolley(Trolley trolley);
+    int addToTrolley(Trolley trolley);
     int deleteFromTro(Trolley trolley);
     List<Trolley> getTroByUid(int uid);
     Trolley getTroById(Trolley trolley);
     int plus(Trolley trolley);
     int sub(Trolley trolley);
+    int setAmount(Trolley trolley);
 }

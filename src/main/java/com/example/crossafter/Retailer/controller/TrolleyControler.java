@@ -88,4 +88,36 @@ public class TrolleyControler {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //获取购物车
+    @RequestMapping("/gettro")
+    public void getTrolleyById(@RequestBody Object obj,HttpServletResponse response)throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"uid")){
+            int uid = jsonObject.getInt("uid");
+            respEntity = trolleyService.getTrolley(uid);
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //设置商品数量
+    @RequestMapping("/setamount")
+    public void setAmount(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"Trolley")){
+            Trolley trolley = (Trolley) JSONObject.toBean(jsonObject.getJSONObject("Trolley"),Trolley.class);
+            respEntity = trolleyService.setAmount(trolley);
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }
