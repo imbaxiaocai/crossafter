@@ -9,8 +9,8 @@ public class RetailerInventory {
     private int fid;
     private int status;
     private int duration;
-    private Date begin_date;
-    private Date end_date;
+    private String begin_date;
+    private String end_date;
 
     public int getUid() {
         return uid;
@@ -60,19 +60,19 @@ public class RetailerInventory {
         this.duration = duration;
     }
 
-    public Date getBegin_date() {
+    public String getBegin_date() {
         return begin_date;
     }
 
-    public void setBegin_date(Date begin_date) {
+    public void setBegin_date(String begin_date) {
         this.begin_date = begin_date;
     }
 
-    public Date getEnd_date() {
+    public String getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(Date end_date) {
+    public void setEnd_date(String end_date) {
         this.end_date = end_date;
     }
 }

@@ -19,14 +19,14 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @RequestMapping("/trolley")
-public class TrolleyControler {
+public class TrolleyController {
     @Autowired
     private TrolleyService trolleyService;
     @Autowired
     private CheckJson checkJson;
     //添加到购物车
     @RequestMapping("/add")
-    public void addToTrolley(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+    public void ckt_addToTrolley(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject json = JSONObject.fromObject(obj);
         if(checkJson.isEffective(json,"Trolley")){
@@ -42,7 +42,7 @@ public class TrolleyControler {
     }
     //从购物车删除
     @RequestMapping("/del")
-    public void delFromTrolley(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+    public void ckt_delFromTrolley(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject json = JSONObject.fromObject(obj);
         if(checkJson.isEffective(json,"Trolley")){
@@ -58,7 +58,7 @@ public class TrolleyControler {
     }
     //数量+1
     @RequestMapping("/plus")
-    public void pluGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+    public void ckt_pluGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject json = JSONObject.fromObject(obj);
         if(checkJson.isEffective(json,"Trolley")){
@@ -74,7 +74,7 @@ public class TrolleyControler {
     }
     //数量-1
     @RequestMapping("/sub")
-    public void subGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+    public void ckt_subGood(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject json = JSONObject.fromObject(obj);
         if(checkJson.isEffective(json,"Trolley")){
@@ -90,7 +90,7 @@ public class TrolleyControler {
     }
     //获取购物车
     @RequestMapping("/gettro")
-    public void getTrolleyById(@RequestBody Object obj,HttpServletResponse response)throws IOException{
+    public void ckt_getTrolleyById(@RequestBody Object obj,HttpServletResponse response)throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"uid")){
@@ -106,7 +106,7 @@ public class TrolleyControler {
     }
     //设置商品数量
     @RequestMapping("/setamount")
-    public void setAmount(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+    public void ckt_setAmount(@RequestBody Object obj,HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"Trolley")){

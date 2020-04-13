@@ -4,4 +4,10 @@
     <insert id="addPreOrder" parameterType="com.example.crossafter.Retailer.bean.PreOrder">
         INSERT INTO preorder (gid,fid,rid,status,duration,amount,ssprice) VALUES (#{gid},#{fid},#{rid},0,#{duration},#{amount},#{ssprice});
     </insert>
+    <select id="getApply" parameterType="int" resultType="com.example.crossafter.Retailer.bean.PreOrder">
+        SELECT * FROM preorder WHERE fid=#{fid} AND status=0;
+    </select>
+    <update id="setStatus" parameterType="com.example.crossafter.Retailer.bean.PreOrder">
+        UPDATE preorder SET status=#{status} WHERE poid=#{poid}
+    </update>
 </mapper>

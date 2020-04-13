@@ -30,7 +30,7 @@ public class PreOrderComtroller {
     CheckJson checkJson;
     //库存预定
     @RequestMapping("/addpreorder")
-    public void addPreOrder(@RequestBody Object obj, HttpServletResponse response) throws IOException {
+    public void ckt_addPreOrder(@RequestBody Object obj, HttpServletResponse response) throws IOException {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"preorder")){
