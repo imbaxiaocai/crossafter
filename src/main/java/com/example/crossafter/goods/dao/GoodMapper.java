@@ -15,4 +15,5 @@ public interface GoodMapper {
     Good getGoodById(int uid);
     double getSprice(int gid);
     int getDuration(int gid);
+    int addGood(Good good);
 }

@@ -12,6 +12,9 @@ public class Good{
     private int gtype;
     private double sprice;
     private int duration;
+    private int amount;
+    private int content;
+    private String description;
 
     public int getGid() {
         return gid;
@@ -83,5 +86,28 @@ public class Good{
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+    public int getContent() {
+        return content;
+    }
+
+    public void setContent(int content) {
+        this.content = content;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
