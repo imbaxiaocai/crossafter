@@ -30,7 +30,6 @@ public class PreOrderServiceImpl implements PreOrderService {
     private TrolleyMapper trolleyMapper;
     public RespEntity addPreOrder(ArrayList<PreOrder> preOrders,String uname){
         RespEntity respEntity = new RespEntity();
-
         try {
             //计算总保证金
             double sum = 0;

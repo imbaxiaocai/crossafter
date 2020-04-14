@@ -16,4 +16,6 @@ public interface GoodMapper {
     double getSprice(int gid);
     int getDuration(int gid);
     int addGood(Good good);
+    int getAmount(int gid);
+    int setAmount(int gid);
 }

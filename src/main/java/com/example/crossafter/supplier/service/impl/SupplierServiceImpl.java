@@ -56,24 +56,33 @@ public class SupplierServiceImpl implements SupplierService{
         RespEntity respEntity = new RespEntity();
         try{
             if (preOrder.getStatus()==1){
-                RetailerInventory retailerInventory = new RetailerInventory();
-                retailerInventory.setStatus(0);
-                retailerInventory.setDuration(preOrder.getDuration());
-                retailerInventory.setPoid(preOrder.getPoid());
-                retailerInventory.setGid(preOrder.getGid());
-                retailerInventory.setUid(preOrder.getRid());
-                retailerInventory.setFid(preOrder.getFid());
-                //计算日期偏移量
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-                Date date = new Date();
-                String begin = sdf.format(date);
-                retailerInventory.setBegin_date(begin);
-                //偏移计算
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(sdf.parse(begin));
-                cal.add(Calendar.DAY_OF_YEAR,preOrder.getDuration());
-                retailerInventory.setEnd_date(sdf.format(cal.getTime()));
-                retailerInventoryMapper.addInventory(retailerInventory);
+                int amount= goodMapper.getAmount(preOrder.getGid());
+                if(amount>=preOrder.getAmount()) {
+                    RetailerInventory retailerInventory = new RetailerInventory();
+                    retailerInventory.setStatus(0);
+                    retailerInventory.setDuration(preOrder.getDuration());
+                    retailerInventory.setPoid(preOrder.getPoid());
+                    retailerInventory.setGid(preOrder.getGid());
+                    retailerInventory.setUid(preOrder.getRid());
+                    retailerInventory.setFid(preOrder.getFid());
+                    retailerInventory.setAmount(preOrder.getAmount());
+                    //计算日期偏移量
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+                    Date date = new Date();
+                    String begin = sdf.format(date);
+                    retailerInventory.setBegin_date(begin);
+                    //偏移计算
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(sdf.parse(begin));
+                    cal.add(Calendar.DAY_OF_YEAR, preOrder.getDuration());
+                    retailerInventory.setEnd_date(sdf.format(cal.getTime()));
+                    goodMapper.setAmount(amount-preOrder.getAmount());
+                    retailerInventoryMapper.addInventory(retailerInventory);
+                }
+                else {
+                    respEntity.setHead(RespHead.REQ_ERROR);
+                    return respEntity;
+                }
             }
             preOrderMapper.setStatus(preOrder);
             respEntity.setHead(RespHead.SUCCESS);

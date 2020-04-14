@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.Retailer.dao.RetailerInventoryMapper">
     <insert id="addInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date});
+        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date},#{amount});
     </insert>
+    <select id="getInventory" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        SELECT * FROM retailer_inventory WHERE gid=#{0} AND end_date>=#{1};
+    </select>
 </mapper>

@@ -11,6 +11,7 @@ public class RetailerInventory {
     private int duration;
     private String begin_date;
     private String end_date;
+    private int amount;
 
     public int getUid() {
         return uid;
@@ -74,5 +75,13 @@ public class RetailerInventory {
 
     public void setEnd_date(String end_date) {
         this.end_date = end_date;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 }

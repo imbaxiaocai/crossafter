@@ -28,4 +28,18 @@ public class GoodServiceImpl implements GoodService{
         }
         return respEntity;
     }
+    public RespEntity getGoodDetail(int gid){
+        RespEntity respEntity = new RespEntity();
+        try {
+            Good good = goodMapper.getGoodById(gid);
+            respEntity.setData(good);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return  respEntity;
+        }
+        return  respEntity;
+    }
 }

@@ -13,4 +13,10 @@
     <insert id="addGood" parameterType="com.example.crossafter.goods.bean.Good">
         insert into goods (gname,fid,gimg,gpirce,gsales,gtype,sprice,duration,amount,content,description) values (#{gname},#{fid},#{gimg},#{gprice},#{gsales},#{gtype},#{sprice},#{duration},#{amount},#{content},#{description});
     </insert>
+    <select id="getAmount" parameterType="int">
+        SELECT amount FROM goods WHERE gid=#{gid}
+    </select>
+    <update id="setAmount" parameterType="int">
+        UPDATE goods SET amount=#{amount} WHERE gid=#{gid};
+    </update>
 </mapper>
