@@ -28,4 +28,5 @@ public class Evaluation {
     public void setWeight(int weight) {
         this.weight = weight;
     }
+
 }
