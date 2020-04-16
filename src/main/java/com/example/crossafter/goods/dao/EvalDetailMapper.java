@@ -1,6 +1,6 @@
 package com.example.crossafter.goods.dao;
 
-import com.example.crossafter.goods.bean.Evaluation;
+import com.example.crossafter.goods.bean.EvalDetail;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @Component
 @Mapper
-public interface EvaluationMapper {
-    int evalInit(Evaluation evaluation);
-    int updateEval(Evaluation evaluation);
-    Evaluation getEvalByGid(int gid);
+public interface EvalDetailMapper {
+    int addEvaluation(EvalDetail evalDetail);
 }

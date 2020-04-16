@@ -4,6 +4,7 @@ public class Evaluation {
     private int gid;
     private double evaluation;
     private int weight;
+    private int amount;
 
     public int getGid() {
         return gid;
@@ -29,4 +30,11 @@ public class Evaluation {
         this.weight = weight;
     }
 
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
 }

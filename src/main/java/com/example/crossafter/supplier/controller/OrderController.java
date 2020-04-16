@@ -44,8 +44,9 @@ public class OrderController {
     public void ckt_shipOrder(@RequestBody Object obj, HttpServletResponse response)throws IOException{
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
-        if(checkJson.isEffective(jsonObject,"id")){
-            respEntity = orderService.shipOrder(jsonObject.getInt("id"));
+        if(checkJson.isEffective(jsonObject,"order")){
+            Order order = (Order)JSONObject.toBean(jsonObject.getJSONObject("order"),Order.class);
+            respEntity = orderService.shipOrder(order);
         }
         else{
             respEntity.setHead(RespHead.REQ_ERROR);

@@ -13,5 +13,7 @@ import java.util.List;
 public interface OrderMapper {
     int addOrder(Order order);
     List<Order> getUnshippedOrder(int fid);
-    int shipOrder(int id);
+    int shipOrder(Order order);
+    int confirmOrder(int id);
+    int evalOrder(int id);
 }

@@ -55,10 +55,23 @@ public class OrderServiceImpl implements OrderService{
         }
         return  respEntity;
     }
-    public RespEntity shipOrder(int id){
+    public RespEntity shipOrder(Order order){
         RespEntity respEntity = new RespEntity();
         try{
-            orderMapper.shipOrder(id);
+            orderMapper.shipOrder(order);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
+    public RespEntity confirmOrder(int id){
+        RespEntity respEntity = new RespEntity();
+        try{
+            orderMapper.confirmOrder(id);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.goods.dao.EvaluationMapper">
     <insert id="evalInit" parameterType="com.example.crossafter.goods.bean.Evaluation">
-        insert into evaluation (gid,weight) values (#{gid},#{weight});
+        insert into evaluation (gid,weight,amount,evaluation) values (#{gid},#{weight},0,0.0);
     </insert>
+    <update id="updateEval" parameterType="com.example.crossafter.goods.bean.Evaluation">
+        UPDATE evaluation SET amount=#{amount},evaluation=#{evaluation} WHERE gid=#{gid};
+    </update>
+    <select id="getEvalByGid" parameterType="int" resultType="com.example.crossafter.goods.bean.Evaluation">
+        SELECT * FROM evaluation WHERE gid=#{gid};
+    </select>
 </mapper>

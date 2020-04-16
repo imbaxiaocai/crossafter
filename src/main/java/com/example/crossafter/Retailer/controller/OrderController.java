@@ -41,4 +41,19 @@ public class OrderController {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //确认收货
+    @RequestMapping("/confirm")
+    public void ckt_shipOrder(@RequestBody Object obj, HttpServletResponse response)throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"id")){
+            respEntity = orderService.confirmOrder(jsonObject.getInt("id"));
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }

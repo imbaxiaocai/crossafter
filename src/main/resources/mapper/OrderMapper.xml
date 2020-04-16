@@ -7,7 +7,13 @@
     <select id="getUnshippedOrder" parameterType="int" resultType="com.example.crossafter.pub.bean.Order">
         SELECT * FROM order WHERE fid=#{fid} AND status=0
     </select>
-    <update id="shipOrder" parameterType="int">
-        UPDATE order SET status=1 WHERE id=#{id}
+    <update id="shipOrder" parameterType="com.example.crossafter.pub.bean.Order">
+        UPDATE order SET status=1,orderid=#{orderid} WHERE id=#{id}
+    </update>
+    <update id="confirmOrder" parameterType="int">
+        UPDATE order SET status=2 WHERE id=#{id}
+    </update>
+    <update id="evalOrder" parameterType="int">
+        UPDATE order SET status=3 WHERE id=#{id};
     </update>
 </mapper>
