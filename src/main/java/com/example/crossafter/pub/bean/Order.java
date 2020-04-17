@@ -14,6 +14,8 @@ public class Order {
     private String begin_date;
     private int poid;
     private int amount;
+    private String uname;
+    private String gname;
     public int getId() {
         return id;
     }
@@ -116,5 +118,21 @@ public class Order {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getGname() {
+        return gname;
+    }
+
+    public void setGname(String gname) {
+        this.gname = gname;
     }
 }

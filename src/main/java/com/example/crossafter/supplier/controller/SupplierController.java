@@ -2,6 +2,7 @@ package com.example.crossafter.supplier.controller;
 
 
 import com.example.crossafter.Retailer.bean.PreOrder;
+import com.example.crossafter.Retailer.service.InventoryService;
 import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
@@ -37,7 +38,9 @@ public class SupplierController {
     @Autowired
     private SupplierService supplierService;
     @Autowired
-    RedisUtils redisUtils;
+    private RedisUtils redisUtils;
+    @Autowired
+    private InventoryService inventoryService;
     //上架商品
     @RequestMapping("/addgood")
     public void addGood(HttpServletRequest request,HttpServletResponse response) throws IOException{
@@ -111,8 +114,22 @@ public class SupplierController {
     //查看商品库存
     //修改商品库存
     //查看零售商库存
+    @RequestMapping("/getinventorybyfid")
+    public void ckt_getInventoryByFid(@RequestBody Object obj, HttpServletResponse response) throws IOException {
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"fid")){
+            respEntity = supplierService.getInventoryByFid(jsonObject.getInt("fid"));
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
     //查看实际订单
-    //发货
     //显示厂商商品
 
     //supplier 的bean

@@ -13,4 +13,7 @@ public interface UserMapper {
     User userLogin(User user);
     double getWallet(String uname);
     int setWallet(User user);
+    String getUnameById(int uid);
+    int getUidByUname(String uname);
+    String getAvatarById(int uid);
 }

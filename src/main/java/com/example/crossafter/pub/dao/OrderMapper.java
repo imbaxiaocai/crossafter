@@ -16,4 +16,5 @@ public interface OrderMapper {
     int shipOrder(Order order);
     int confirmOrder(int id);
     int evalOrder(int id);
+    Order getOrderById(int id);
 }

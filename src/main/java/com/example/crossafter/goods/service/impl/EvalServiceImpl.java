@@ -8,8 +8,13 @@ import com.example.crossafter.goods.service.EvalService;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.dao.OrderMapper;
+import com.example.crossafter.pub.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class EvalServiceImpl implements EvalService{
@@ -19,6 +24,8 @@ public class EvalServiceImpl implements EvalService{
     private EvaluationMapper evaluationMapper;
     @Autowired
     private OrderMapper orderMapper;
+    @Autowired
+    private UserMapper userMapper;
     public RespEntity addEvaluation(EvalDetail evaluation){
         RespEntity respEntity = new RespEntity();
         try {
@@ -34,6 +41,20 @@ public class EvalServiceImpl implements EvalService{
             avg = (avg*amount+evaluation.getEvaluation())/(amount+1);
             eval.setEvaluation(avg);
             evaluationMapper.updateEval(eval);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return respEntity;
+    }
+    public RespEntity getAllEvalDetail(int gid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            List<EvalDetail> evalDetails = evalDetailMapper.getAllEvalDetail(gid);
+            respEntity.setData(evalDetails);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

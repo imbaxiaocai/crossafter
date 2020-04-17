@@ -12,10 +12,12 @@ import java.util.List;
 @Mapper
 public interface GoodMapper {
     List<Good> getAllGoods();
-    Good getGoodById(int uid);
+    Good getGoodById(int gid);
     double getSprice(int gid);
     int getDuration(int gid);
     int addGood(Good good);
     int getAmount(int gid);
     int setAmount(int gid);
+    String getGname(int gid);
+    double getGprice(int gid);
 }

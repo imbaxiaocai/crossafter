@@ -6,6 +6,7 @@ public class EvalDetail {
     private int uid;
     private String content;
     private double evaluation;
+    private String uname;
 
     public int getOid() {
         return oid;
@@ -45,5 +46,13 @@ public class EvalDetail {
 
     public void setEvaluation(double evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }

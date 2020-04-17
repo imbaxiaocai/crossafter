@@ -10,4 +10,5 @@ public interface SupplierService {
     RespEntity getApply(int fid);
     RespEntity setStatus(PreOrder preOrder);
     RespEntity addGood(HttpServletRequest request, Good good);
+    RespEntity getInventoryByFid(int fid);
 }

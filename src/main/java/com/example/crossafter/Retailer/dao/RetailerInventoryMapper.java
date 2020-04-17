@@ -13,6 +13,10 @@ import java.util.List;
 public interface RetailerInventoryMapper {
     int addInventory(RetailerInventory retailerInventory);
     List<RetailerInventory> getInventory(int uid,String now);
+    List<RetailerInventory> getInventoryByFid(int uid,String now);
+    List<RetailerInventory> getExpired(String now);
     int getAmountByPoid(int poid);
     int subInventory(RetailerInventory retailerInventory);
+    int addToHis(RetailerInventory retailerInventory);
+    int delExpiredInventory(RetailerInventory retailerInventory);
 }

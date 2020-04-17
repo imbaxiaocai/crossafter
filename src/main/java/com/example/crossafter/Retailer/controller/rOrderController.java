@@ -20,7 +20,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @RequestMapping("/rorder")
-public class OrderController {
+public class rOrderController {
     @Autowired
     private CheckJson checkJson;
     @Autowired

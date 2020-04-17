@@ -2,14 +2,19 @@ package com.example.crossafter.pub.service.impl;
 
 import com.example.crossafter.Retailer.bean.RetailerInventory;
 import com.example.crossafter.Retailer.dao.RetailerInventoryMapper;
+import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.Order;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.dao.OrderMapper;
+import com.example.crossafter.pub.dao.UserMapper;
 import com.example.crossafter.pub.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -18,6 +23,10 @@ public class OrderServiceImpl implements OrderService{
     private OrderMapper orderMapper;
     @Autowired
     private RetailerInventoryMapper retailerInventoryMapper;
+    @Autowired
+    private UserMapper userMapper;
+    @Autowired
+    private GoodMapper goodMapper;
     public RespEntity addOrder(Order order){
         RespEntity respEntity = new RespEntity();
         try{
@@ -71,7 +80,18 @@ public class OrderServiceImpl implements OrderService{
     public RespEntity confirmOrder(int id){
         RespEntity respEntity = new RespEntity();
         try{
+            Order order = orderMapper.getOrderById(id);
+            //确认收货
             orderMapper.confirmOrder(id);
+            //厂商加钱
+            String uname = userMapper.getUnameById(order.getFid());
+            double wallet = userMapper.getWallet(uname);
+            int gid = order.getGid();
+            wallet = wallet + order.getAmount()*(goodMapper.getGprice(gid)-goodMapper.getSprice(gid));
+            User user = new User();
+            user.setWallet(wallet);
+            user.setUname(uname);
+            userMapper.setWallet(user);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

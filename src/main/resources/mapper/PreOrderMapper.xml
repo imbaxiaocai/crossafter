@@ -10,4 +10,7 @@
     <update id="setStatus" parameterType="com.example.crossafter.Retailer.bean.PreOrder">
         UPDATE preorder SET status=#{status} WHERE poid=#{poid}
     </update>
+    <select id="getPreOrderByPoid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.PreOrder">
+        SELECT * FROM preorder WHERE poid=#{poid};
+    </select>
 </mapper>

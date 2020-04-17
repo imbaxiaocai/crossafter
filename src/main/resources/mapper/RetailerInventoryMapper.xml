@@ -2,15 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.Retailer.dao.RetailerInventoryMapper">
     <insert id="addInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date},#{amount});
+        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,gname,uname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{gname},#{uname});
+    </insert>
+    <insert id="addToHis" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        insert into retailinventory_hos (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
     </insert>
     <select id="getInventory" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        SELECT * FROM retailer_inventory WHERE gid=#{0} AND end_date>=#{1};
+        SELECT * FROM retailer_inventory WHERE uid=#{0} AND end_date>=#{1};
     </select>
+    <select id="getExpired" parameterType="String" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        SELECT * FROM retailer_inventory WHERE end_date &lt; #{now} OR amount=0;
+    </select>
+    <delete id="delExpiredInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        DELETE  FROM  retailer_inventory WHERE poid=#{poid};
+    </delete>
     <select id="getAmountByPoid" parameterType="int" resultType="int">
         SELECT amount FROM retailer_inventory WHERE poid=#{poid};
     </select>
     <update id="subInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
         UPDATE retailer_inventory SET amount =#{amount} WHERE poid = #{poid}
     </update>
+    <select id="getInventoryByFid" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        SELECT * FROM retailer_inventory WHERE WHERE fid=#{0} AND end_date>=#{1};
+    </select>
 </mapper>

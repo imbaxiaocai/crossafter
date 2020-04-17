@@ -41,4 +41,19 @@ public class EvalController {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //获取某商品所有评价
+    @RequestMapping("/getalldetails")
+    public void ckt_getAllEvalDetails(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"gid")){
+            respEntity = evalService.getAllEvalDetail(jsonObject.getInt("gid"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }

@@ -2,15 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.pub.dao.UserMapper">
     <insert id="addUser" parameterType="com.example.crossafter.pub.bean.User">
-        INSERT INTO user (uname,upsw,rname,ID,phonenumber,location,wallet) VALUES (#{uname},#{upsw},#{rname},#{ID},#{phonenumber},#{location},0.00);
+        INSERT INTO `user` (uname,upsw,rname,ID,phonenumber,location,wallet,usertype) VALUES (#{uname},#{upsw},#{rname},#{ID},#{phonenumber},#{location},0.00,#{usertype});
     </insert>
     <select id="userLogin" parameterType="com.example.crossafter.pub.bean.User" resultType="com.example.crossafter.pub.bean.User">
-        SELECT * FROM user WHERE uname=#{uname} AND upsw=#{upsw};
+        SELECT * FROM `user` WHERE uname=#{uname} AND upsw=#{upsw};
     </select>
     <select id="getWallet" parameterType="String" resultType="double">
-        SELECT wallet FROM user WHERE uname=#{uname}
+        SELECT wallet FROM `user` WHERE uname=#{uname}
     </select>
     <update id="setWallet" parameterType="com.example.crossafter.pub.bean.User">
-        UPDATE user SET wallet=#{wallet} WHERE uname=#{uname}
+        UPDATE `user` SET wallet=#{wallet} WHERE uname=#{uname}
     </update>
+    <select id="getUnameById" parameterType="int" resultType="String">
+        SELECT uname FROM `user` WHERE uid=#{uid};
+    </select>
+    <select id="getUidByUname" parameterType="String" resultType="int">
+        SELECT uid FROM `user` WHERE uname=#{uname}
+    </select>
+    <select id="getAvatarById" parameterType="int" resultType="String">
+        SELECT avatar FROM `user` WHERE uid=#{uid};
+    </select>
 </mapper>

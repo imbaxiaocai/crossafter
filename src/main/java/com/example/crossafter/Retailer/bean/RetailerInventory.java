@@ -12,6 +12,8 @@ public class RetailerInventory {
     private String begin_date;
     private String end_date;
     private int amount;
+    private String gname;
+    private String uname;
 
     public int getUid() {
         return uid;
@@ -83,5 +85,21 @@ public class RetailerInventory {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getGname() {
+        return gname;
+    }
+
+    public void setGname(String gname) {
+        this.gname = gname;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }

@@ -10,6 +10,8 @@ import com.example.crossafter.goods.dao.EvaluationMapper;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.bean.User;
+import com.example.crossafter.pub.dao.UserMapper;
 import com.example.crossafter.supplier.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,25 @@ public class SupplierServiceImpl implements SupplierService{
     private GoodMapper goodMapper;
     @Autowired
     private EvaluationMapper evaluationMapper;
+    @Autowired
+    private UserMapper userMapper;
+    public RespEntity getInventoryByFid(int fid){
+        RespEntity respEntity = new RespEntity();
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            Date date = new Date();
+            String now = sdf.format(date);
+            List<RetailerInventory> retailerInventories= retailerInventoryMapper.getInventoryByFid(fid,now);
+            respEntity.setData(retailerInventories);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return respEntity;
+    }
     public RespEntity getApply(int fid){
         RespEntity respEntity = new RespEntity();
         try{
@@ -55,6 +76,17 @@ public class SupplierServiceImpl implements SupplierService{
     public RespEntity setStatus(PreOrder preOrder){
         RespEntity respEntity = new RespEntity();
         try{
+            int status = preOrder.getStatus();
+            preOrder = preOrderMapper.getPreOrderByPoid(preOrder.getPoid());
+            preOrder.setStatus(status);
+            //计算保证金
+            double sum = 0;
+            String rname = userMapper.getUnameById(preOrder.getRid());
+            double rwallet = userMapper.getWallet(rname);
+            String sname = userMapper.getUnameById(preOrder.getFid());
+            double swallet = userMapper.getWallet(sname);
+            sum = preOrder.getAmount()*goodMapper.getSprice(preOrder.getGid());
+            //处理保证金和交易状态
             if (preOrder.getStatus()==1){
                 int amount= goodMapper.getAmount(preOrder.getGid());
                 if(amount>=preOrder.getAmount()) {
@@ -66,6 +98,8 @@ public class SupplierServiceImpl implements SupplierService{
                     retailerInventory.setUid(preOrder.getRid());
                     retailerInventory.setFid(preOrder.getFid());
                     retailerInventory.setAmount(preOrder.getAmount());
+                    retailerInventory.setUname(userMapper.getUnameById(preOrder.getRid()));
+                    retailerInventory.setGname(goodMapper.getGname(preOrder.getGid()));
                     //计算日期偏移量
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     Date date = new Date();
@@ -77,12 +111,26 @@ public class SupplierServiceImpl implements SupplierService{
                     cal.add(Calendar.DAY_OF_YEAR, preOrder.getDuration());
                     retailerInventory.setEnd_date(sdf.format(cal.getTime()));
                     goodMapper.setAmount(amount-preOrder.getAmount());
+                    //厂商加钱
+                    swallet = swallet + sum;
+                    User supplier = new User();
+                    supplier.setUname(sname);
+                    supplier.setWallet(swallet);
+                    userMapper.setWallet(supplier);
                     retailerInventoryMapper.addInventory(retailerInventory);
                 }
                 else {
                     respEntity.setHead(RespHead.REQ_ERROR);
                     return respEntity;
                 }
+            }
+            else if(preOrder.getStatus()==2){
+                //零售商加钱
+                rwallet = rwallet + sum;
+                User retailer = new User();
+                retailer.setWallet(rwallet);
+                retailer.setUname(rname);
+                userMapper.setWallet(retailer);
             }
             preOrderMapper.setStatus(preOrder);
             respEntity.setHead(RespHead.SUCCESS);
@@ -124,4 +172,5 @@ public class SupplierServiceImpl implements SupplierService{
         }
         return  respEntity;
     }
+
 }

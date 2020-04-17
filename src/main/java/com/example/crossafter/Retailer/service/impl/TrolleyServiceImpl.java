@@ -7,10 +7,12 @@ import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -19,13 +21,25 @@ public class TrolleyServiceImpl implements TrolleyService{
     private TrolleyMapper trolleyMapper;
     @Autowired
     private GoodMapper goodMapper;
+    @Autowired
+    private UserMapper userMapper;
     public RespEntity addToTrolley(Trolley trolley){
+        //前端包含 uid gid amount默认为1
         RespEntity respEntity = new RespEntity();
         try{
             if(trolleyMapper.getTroById(trolley)!=null){
                 trolleyMapper.plus(trolley);
             }
             else {
+                int gid = trolley.getGid();
+                Good good =goodMapper.getGoodById(gid);
+                trolley.setFname(userMapper.getUnameById(good.getFid()));
+                trolley.setSprice(good.getSprice());
+                trolley.setGname(good.getGname());
+                trolley.setDuration(good.getDuration());
+                trolley.setGimg(good.getGimg());
+                trolley.setFimg(userMapper.getAvatarById(good.getFid()));
+                System.out.println(trolley.getGname());
                 trolleyMapper.addToTrolley(trolley);
             }
             respEntity.setHead(RespHead.SUCCESS);
@@ -80,12 +94,20 @@ public class TrolleyServiceImpl implements TrolleyService{
         RespEntity respEntity = new RespEntity();
         try{
             List<Trolley> trolleys = trolleyMapper.getTroByUid(uid);
-            List<Good> goods = new ArrayList<Good>();
+            HashMap<String,List<Trolley>> data = new HashMap<String,List<Trolley>>();
             for(int i=0;i<trolleys.size();i++){
-                Good good = goodMapper.getGoodById(trolleys.get(i).getGid());
-                goods.add(good);
+                Trolley trolley = trolleys.get(i);
+                String fname = trolley.getFname();
+                if(data.containsKey(fname)){
+                    data.get(fname).add(trolley);
+                }
+                else {
+                    List<Trolley> ts = new ArrayList<Trolley>();
+                    ts.add(trolley);
+                    data.put(fname,ts);
+                }
             }
-            respEntity.setData(goods);
+            respEntity.setData(data);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

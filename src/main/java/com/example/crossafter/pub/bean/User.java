@@ -9,7 +9,8 @@ public class User{
     private String phonenumber;
     private String location;
     private double wallet;
-
+    private int usertype; //0-零售商 1-供应商
+    private String Avatar;
     public int getUid() {
         return uid;
     }
@@ -65,6 +66,29 @@ public class User{
     public void setLocation(String location) {
         this.location = location;
     }
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
+
+    public int getUserType() {
+        return usertype;
+    }
+
+    public void setUserType(int userType) {
+        this.usertype = userType;
+    }
+
+    public String getAvatar() {
+        return Avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        Avatar = avatar;
+    }
     @Override
     public boolean equals(Object obj){
         if(obj instanceof User){
@@ -75,11 +99,5 @@ public class User{
         return false;
     }
 
-    public double getWallet() {
-        return wallet;
-    }
 
-    public void setWallet(double wallet) {
-        this.wallet = wallet;
-    }
 }

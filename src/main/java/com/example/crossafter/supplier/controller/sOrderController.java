@@ -19,7 +19,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @RequestMapping("/sorder")
-public class OrderController {
+public class sOrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
