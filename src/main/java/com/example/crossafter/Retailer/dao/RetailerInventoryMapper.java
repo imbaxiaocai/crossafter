@@ -19,4 +19,5 @@ public interface RetailerInventoryMapper {
     int subInventory(RetailerInventory retailerInventory);
     int addToHis(RetailerInventory retailerInventory);
     int delExpiredInventory(RetailerInventory retailerInventory);
+    RetailerInventory getInventoryByPoid(int poid);
 }

@@ -20,9 +20,12 @@
         SELECT amount FROM retailer_inventory WHERE poid=#{poid};
     </select>
     <update id="subInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        UPDATE retailer_inventory SET amount =#{amount} WHERE poid = #{poid}
+        UPDATE retailer_inventory SET amount =#{amount} WHERE poid = #{poid};
     </update>
     <select id="getInventoryByFid" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
         SELECT * FROM retailer_inventory WHERE WHERE fid=#{0} AND end_date>=#{1};
+    </select>
+    <select id="getInventoryByPoid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
+        SELECT * FROM retailer_inventory WHERE poid=#{poid};
     </select>
 </mapper>

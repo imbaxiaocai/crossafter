@@ -2,6 +2,7 @@ package com.example.crossafter.pub.dao;
 
 import com.example.crossafter.pub.bean.Order;
 import org.apache.ibatis.annotations.Mapper;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,6 @@ public interface OrderMapper {
     int confirmOrder(int id);
     int evalOrder(int id);
     Order getOrderById(int id);
+    List<Order> getOrderByRid(int rid);
+    List<Order> getOrderByFid(int gid);
 }

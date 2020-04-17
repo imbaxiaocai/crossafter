@@ -16,6 +16,7 @@ public class Order {
     private int amount;
     private String uname;
     private String gname;
+    private double sgpirce;//额外支付金额
     public int getId() {
         return id;
     }
@@ -134,5 +135,13 @@ public class Order {
 
     public void setGname(String gname) {
         this.gname = gname;
+    }
+
+    public double getSgpirce() {
+        return sgpirce;
+    }
+
+    public void setSgpirce(double sgpirce) {
+        this.sgpirce = sgpirce;
     }
 }

@@ -19,7 +19,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin
 @RequestMapping("/sorder")
-public class sOrderController {
+public class SOrderController {
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -47,6 +47,21 @@ public class sOrderController {
         if(checkJson.isEffective(jsonObject,"order")){
             Order order = (Order)JSONObject.toBean(jsonObject.getJSONObject("order"),Order.class);
             respEntity = orderService.shipOrder(order);
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //厂商查看订单
+    @RequestMapping("/supplierorder")
+    public void ckt_getOrderByFid(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"fid")){
+            respEntity = orderService.getOrderByRid(jsonObject.getInt("fid"));
         }
         else{
             respEntity.setHead(RespHead.REQ_ERROR);

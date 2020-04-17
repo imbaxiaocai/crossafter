@@ -2,6 +2,7 @@ package com.example.crossafter.pub.service.impl;
 
 import com.example.crossafter.Retailer.bean.RetailerInventory;
 import com.example.crossafter.Retailer.dao.RetailerInventoryMapper;
+import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.Order;
 import com.example.crossafter.pub.bean.RespEntity;
@@ -32,12 +33,38 @@ public class OrderServiceImpl implements OrderService{
         try{
             int ramount = retailerInventoryMapper.getAmountByPoid(order.getPoid());
             if(ramount>=order.getAmount()){
-                RetailerInventory retailerInventory = new RetailerInventory();
-                retailerInventory.setAmount(ramount-order.getAmount());
-                retailerInventory.setPoid(order.getPoid());
-                retailerInventoryMapper.subInventory(retailerInventory);
-                orderMapper.addOrder(order);
-                respEntity.setHead(RespHead.SUCCESS);
+                //添加订单 rid poid amount
+                int rid = order.getRid();
+                int poid = order.getPoid();
+                RetailerInventory rt = retailerInventoryMapper.getInventoryByPoid(poid);
+                int gid = rt.getGid();
+                Good good = goodMapper.getGoodById(gid);
+                order.setFid(good.getFid());
+                order.setGid(gid);
+                order.setRid(rid);
+                order.setUname(userMapper.getUnameById(rid));
+                order.setGname(good.getGname());
+                //零售商扣钱
+                double sum = 0;
+                double wallet =userMapper.getWallet(order.getUname());
+                sum = order.getAmount()*(good.getGprice()-good.getSprice());
+                order.setSgpirce(sum);
+                if(wallet>=sum){
+                    User user = new User();
+                    user.setWallet(wallet-sum);
+                    user.setUname(order.getUname());
+                    userMapper.setWallet(user);
+                    //修改库存
+                    RetailerInventory retailerInventory = new RetailerInventory();
+                    retailerInventory.setAmount(ramount-order.getAmount());
+                    retailerInventory.setPoid(order.getPoid());
+                    retailerInventoryMapper.subInventory(retailerInventory);
+                    orderMapper.addOrder(order);
+                    respEntity.setHead(RespHead.SUCCESS);
+                }
+                else {
+                    respEntity.setHead(RespHead.LACK_OF_BALANCE);
+                }
             }
             else{
                 respEntity.setHead(RespHead.REQ_ERROR);
@@ -101,4 +128,31 @@ public class OrderServiceImpl implements OrderService{
         }
         return  respEntity;
     }
+    public RespEntity getOrderByRid(int rid){
+        RespEntity respEntity = new RespEntity();
+        try {
+            List<Order> orders = orderMapper.getOrderByRid(rid);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
+    public RespEntity getOrderByFid(int fid){
+        RespEntity respEntity = new RespEntity();
+        try {
+            List<Order> orders = orderMapper.getOrderByFid(fid);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
 }
+

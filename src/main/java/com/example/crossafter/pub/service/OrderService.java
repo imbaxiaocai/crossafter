@@ -8,4 +8,6 @@ public interface OrderService {
     RespEntity getUnshippedOrder(int fid);
     RespEntity shipOrder(Order order);
     RespEntity confirmOrder(int id);
+    RespEntity getOrderByRid(int rid);
+    RespEntity getOrderByFid(int fid);
 }
