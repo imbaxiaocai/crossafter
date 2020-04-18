@@ -9,6 +9,7 @@ public class PreOrder {
     private int duration;
     private int amount;
     private double ssprice;
+    private String gname;
 
     public int getPoid() {
         return poid;
@@ -72,5 +73,13 @@ public class PreOrder {
 
     public void setSsprice(double ssprice) {
         this.ssprice = ssprice;
+    }
+
+    public String getGname() {
+        return gname;
+    }
+
+    public void setGname(String gname) {
+        this.gname = gname;
     }
 }
