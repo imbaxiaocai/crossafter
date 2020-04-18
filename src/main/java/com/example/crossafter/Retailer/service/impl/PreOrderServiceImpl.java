@@ -17,6 +17,7 @@ import org.springframework.transaction.TransactionStatus;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PreOrderServiceImpl implements PreOrderService {
@@ -65,6 +66,20 @@ public class PreOrderServiceImpl implements PreOrderService {
             for (int i=0;i<preOrders.size();i++){
                 preOrderMapper.addPreOrder(preOrders.get(i));
             }
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return respEntity;
+    }
+    public RespEntity getRetailerPreOrder(int rid){
+        RespEntity respEntity = new RespEntity();
+        try {
+            List<PreOrder> preOrders = preOrderMapper.getPreOrderByRid(rid);
+            respEntity.setData(preOrders);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

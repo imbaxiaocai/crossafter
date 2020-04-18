@@ -7,4 +7,5 @@ import java.util.ArrayList;
 
 public interface PreOrderService {
     RespEntity addPreOrder(ArrayList<PreOrder> preOrders,String uname);
+    RespEntity getRetailerPreOrder(int rid);
 }

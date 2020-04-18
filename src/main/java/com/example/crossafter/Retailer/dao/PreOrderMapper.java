@@ -16,4 +16,5 @@ public interface PreOrderMapper {
     List<PreOrder> getApply(int fid);
     int setStatus(PreOrder preOrder);
     PreOrder getPreOrderByPoid(int poid);
+    List<PreOrder> getPreOrderByRid(int rid);
 }

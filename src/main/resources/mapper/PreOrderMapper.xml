@@ -13,4 +13,7 @@
     <select id="getPreOrderByPoid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.PreOrder">
         SELECT * FROM preorder WHERE poid=#{poid};
     </select>
+    <select id="getPreOrderByRid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.PreOrder">
+        SELECT * FROM preorder WHERE rid=#{rid};
+    </select>
 </mapper>
