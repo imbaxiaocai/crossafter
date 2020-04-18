@@ -51,4 +51,19 @@ public class PreOrderComtroller {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //零售商库存申请查询
+    @RequestMapping("/getretailpreorder")
+    public void ckt_getRetailPreOrder(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"rid")){
+            respEntity = preOrderService.getRetailerPreOrder(jsonObject.getInt("rid"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }
