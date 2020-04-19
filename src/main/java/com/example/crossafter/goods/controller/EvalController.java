@@ -31,7 +31,7 @@ public class EvalController {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"evaluation")){
-            EvalDetail evaluation = (EvalDetail) JSONObject.toBean(jsonObject.getJSONObject("evaluation"),Evaluation.class);
+            EvalDetail evaluation = (EvalDetail) JSONObject.toBean(jsonObject.getJSONObject("evaluation"),EvalDetail.class);
             respEntity = evalService.addEvaluation(evaluation);
         }
         else {

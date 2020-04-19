@@ -30,6 +30,8 @@ public class EvalServiceImpl implements EvalService{
         RespEntity respEntity = new RespEntity();
         try {
             //添加评价
+            String uname = userMapper.getUnameById(evaluation.getUid());
+            evaluation.setUname(uname);
             evalDetailMapper.addEvaluation(evaluation);
             //修改状态为已评价
             orderMapper.evalOrder(evaluation.getOid());

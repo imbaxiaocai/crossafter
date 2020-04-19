@@ -22,7 +22,7 @@
     <select id="getGname" parameterType="int" resultType="String">
         SELECT gname FROM goods WHERE gid=#{gid};
     </select>
-    <select id="getGprice" resultType="int" parameterType="double">
+    <select id="getGprice" resultType="double" parameterType="int">
         SELECT gprice FROM goods WHERE gid=#{gid};
     </select>
     <select id="getDuration" parameterType="int" resultType="int">

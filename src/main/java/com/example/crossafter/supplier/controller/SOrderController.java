@@ -61,7 +61,7 @@ public class SOrderController {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"fid")){
-            respEntity = orderService.getOrderByRid(jsonObject.getInt("fid"));
+            respEntity = orderService.getOrderByFid(jsonObject.getInt("fid"));
         }
         else{
             respEntity.setHead(RespHead.REQ_ERROR);

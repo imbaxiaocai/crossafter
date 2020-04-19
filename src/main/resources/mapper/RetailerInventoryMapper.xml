@@ -5,7 +5,7 @@
         insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,gname,uname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{gname},#{uname});
     </insert>
     <insert id="addToHis" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailinventory_hos (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
+        insert into retailinventory_his (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
     </insert>
     <select id="getInventory" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
         SELECT * FROM retailer_inventory WHERE uid=#{0} AND end_date>=#{1};

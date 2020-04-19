@@ -19,5 +19,5 @@ public interface OrderMapper {
     int evalOrder(int id);
     Order getOrderById(int id);
     List<Order> getOrderByRid(int rid);
-    List<Order> getOrderByFid(int gid);
+    List<Order> getOrderByFid(int fid);
 }
