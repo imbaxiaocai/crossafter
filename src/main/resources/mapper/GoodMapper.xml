@@ -29,6 +29,6 @@
         SELECT duration FROM goods WHERE gid=#{gid};
     </select>
     <select id="searchGoods" parameterType="String" resultType="com.example.crossafter.goods.bean.Good">
-        SELECT * FROM goods WHERE gname LIKE '%${gname}%';
+        SELECT * FROM goods WHERE gname LIKE #{gname};
     </select>
 </mapper>

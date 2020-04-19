@@ -45,6 +45,7 @@ public class GoodServiceImpl implements GoodService{
     public RespEntity searchGoods(String gname){
         RespEntity respEntity = new RespEntity();
         try {
+            gname = "%" + gname +"%";
             List<Good> result = goodMapper.searchGoods(gname);
             respEntity.setData(result);
             respEntity.setHead(RespHead.SUCCESS);
