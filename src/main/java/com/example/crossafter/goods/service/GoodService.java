@@ -8,4 +8,5 @@ import java.util.List;
 public interface GoodService {
     RespEntity getAllGoods();
     RespEntity getGoodDetail(int gid);
+    RespEntity searchGoods(String gname);
 }

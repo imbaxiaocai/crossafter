@@ -49,4 +49,19 @@ public class GoodController {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //搜索商品
+    @RequestMapping("/searchgoods")
+    public void ckt_searchGoods(@RequestBody Object obj, HttpServletResponse response)throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"gname")){
+            respEntity = goodService.searchGoods(jsonObject.getString("gname"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }
