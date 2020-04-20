@@ -7,4 +7,5 @@ import com.example.crossafter.pub.bean.RespEntity;
 public interface EvalService {
     RespEntity addEvaluation(EvalDetail evaluation);
     RespEntity getAllEvalDetail(int gid);
+    RespEntity getEvaluationByGid(int gid);
 }

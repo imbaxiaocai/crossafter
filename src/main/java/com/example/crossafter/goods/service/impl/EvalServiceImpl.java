@@ -66,4 +66,18 @@ public class EvalServiceImpl implements EvalService{
         }
         return respEntity;
     }
+    public RespEntity getEvaluationByGid(int gid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            Evaluation evaluation = evaluationMapper.getEvalByGid(gid);
+            respEntity.setData(evaluation);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return respEntity;
+    }
 }
