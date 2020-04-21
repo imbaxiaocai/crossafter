@@ -13,6 +13,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -59,7 +60,10 @@ public class UserServiceImpl implements UserService{
                     String tkn = token.createToken(user.getUname());
                     token.setValue(tkn);
                     redisUtils.setToken(user.getUname(), tkn);
-                    respEntity.setData(token);
+                    HashMap<String,Object> res = new HashMap<String, Object>();
+                    res.put("token",token);
+                    res.put("uid",userMapper.getUidByUname(user.getUname()));
+                    respEntity.setData(res);
                 } else {
                     respEntity.setHead(RespHead.FAILED);
                 }
