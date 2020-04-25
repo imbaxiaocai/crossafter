@@ -1,5 +1,6 @@
 package com.example.crossafter.pub.service.impl;
 
+import com.example.crossafter.goods.bean.Evaluation;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.Token;
@@ -10,10 +11,14 @@ import com.example.crossafter.pub.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -75,5 +80,29 @@ public class UserServiceImpl implements UserService{
             }
         }
         return respEntity;
+    }
+    public RespEntity setAvater(HttpServletRequest request,User user){
+        RespEntity respEntity = new RespEntity();
+        try {
+            MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
+            MultipartFile multipartFile =  req.getFile("avater");
+            Random r = new Random();
+            String t = "" + (r.nextInt(9000)+1000) + user.getUname();
+            String filename = DigestUtils.md5DigestAsHex(t.getBytes());
+            String realpath = "http://123.206.128.233:8080/waibaoimg/avater";
+            user.setAvatar(realpath+"/"+filename);
+            String filepath = "/usr/www/waibaoimg/avater";
+            File img = new File(filepath,filename);
+            multipartFile.transferTo(img);
+            //设置头像
+            userMapper.setAvater(user);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
     }
 }

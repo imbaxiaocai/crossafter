@@ -1,8 +1,11 @@
 package com.example.crossafter.pub.controller;
 
+import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.pub.bean.RespEntity;
+import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.service.UserService;
+import com.example.crossafter.pub.utils.RedisUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +22,8 @@ import java.io.IOException;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisUtils redisUtils;
     //用户注册
     @RequestMapping(value="/register",produces = "application/json;charset=UTF-8")
     public void register(@RequestBody User user, HttpServletResponse response) throws IOException{
@@ -40,6 +45,30 @@ public class UserController {
     @RequestMapping(value="/aop",produces = "application/json;charset=UTF-8")
     public void ckt_aop(@RequestBody Object obj, HttpServletResponse response) throws IOException{
         response.getWriter().write("controller method");
+        response.getWriter().close();
+    }
+    //设置头像
+    @RequestMapping("/setavater")
+    public void setAvater(HttpServletRequest request,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        //token验证
+        if(request.getParameter("key")!=null&&request.getParameter("value")!=null){
+            String sysval = redisUtils.getToken(request.getParameter("key"));
+            //token通过
+            if(sysval.equals(request.getParameter("value"))){
+                User user = new User();
+                user.setID(request.getParameter("uid"));
+                respEntity = userService.setAvater(request,user);
+            }
+            else{
+                respEntity.setHead(RespHead.TOKEN_ERROR);
+            }
+        }
+        else {
+            respEntity.setHead(RespHead.TOKEN_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
 }
