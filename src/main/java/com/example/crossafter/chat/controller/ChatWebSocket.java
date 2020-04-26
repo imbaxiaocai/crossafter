@@ -1,7 +1,10 @@
 package com.example.crossafter.chat.controller;
 
 
+import com.example.crossafter.chat.bean.ChatList;
+import com.example.crossafter.chat.bean.ChatMessage;
 import com.example.crossafter.chat.bean.ChatUser;
+import com.example.crossafter.chat.dao.ChatMapper;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,6 +13,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint(value = "/chatwebsocket/{id}/{to}")
 public class ChatWebSocket {
 
+    @Autowired
+    private ChatMapper chatMapper;
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
@@ -37,7 +44,7 @@ public class ChatWebSocket {
     @OnOpen
     public void onOpen(Session session, @PathParam("id") int id, @PathParam("to") int to) {
         ChatUser user = new ChatUser();
-        user.setId(id);
+        user.setId(to);
         user.setSession(session);
         onlineUserMap.put(id,user);
         // 将当前用户存到在线用户列表中
@@ -53,6 +60,7 @@ public class ChatWebSocket {
     @OnClose
     public void onClose(Session session, @PathParam("id") int id, @PathParam("to") int to){
         // 移除的用户信息
+        onlineUserMap.remove(id);
         subOnlineCount();           //在线数减1
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
@@ -66,6 +74,64 @@ public class ChatWebSocket {
      */
     @OnMessage
     public void onMessage(Session session, @PathParam("id") int id, @PathParam("to") int to, String message) {
+        ChatList sender = new ChatList();
+        ChatList receiver = new ChatList();
+        ChatMessage msg = new ChatMessage();
+        msg.setSender(id);
+        msg.setReceiver(to);
+        msg.setContent(message);
+        //日期获取
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date = new Date();
+        String now = sdf.format(date);
+        msg.setSendtime(now);
+
+        sender.setUid(id);
+        sender.setReceiver(to);
+        sender.setMsg(message);
+        receiver.setUid(to);
+        receiver.setReceiver(id);
+        receiver.setMsg(message);
+        //双方都在线
+        if(onlineUserMap.get(id).getId()==to){
+            singleSend(message,onlineUserMap.get(to).getSession());
+            sender.setStatus(1);
+            receiver.setStatus(1);
+            //添加已读msg
+            msg.setStatus(1);
+            chatMapper.addMsg(msg);
+            int msgid = chatMapper.getMsgid(msg);
+            sender.setLastmsg(msgid);
+            receiver.setLastmsg(msgid);
+
+
+        }
+        //接收方未连接
+        else {
+            sender.setStatus(1);
+            receiver.setStatus(0);
+            //添加未读msg
+            msg.setStatus(0);
+            chatMapper.addMsg(msg);
+            int msgid = chatMapper.getMsgid(msg);
+            sender.setLastmsg(msgid);
+            receiver.setLastmsg(msgid);
+
+        }
+        //存在聊天记录
+        if(chatMapper.isInChatList(sender)>0){
+            //发送方对话列表更新
+            chatMapper.updateChatList(sender);
+            //接受方对话列表更新
+            chatMapper.updateChatList(receiver);
+        }
+        //不存在聊天记录
+        else {
+            //发送方对话列表添加用户
+            chatMapper.addChatList(sender);
+            //接受方对话列表添加用户
+            chatMapper.addChatList(receiver);
+        }
         System.out.println(message);
     }
 
@@ -89,7 +155,6 @@ public class ChatWebSocket {
     public static void singleSend(String message,Session session){
         try {
             session.getAsyncRemote().sendText(message);
-            //onlineUser.getSession().getBasicRemote().sendText(message);
             //getAsyncRemote()和getBasicRemote()是异步与同步的区别，大部分情况下，推荐使用getAsyncRemote()异步
         } catch (Exception e) {
             e.printStackTrace();

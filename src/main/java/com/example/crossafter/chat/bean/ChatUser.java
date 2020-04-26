@@ -4,7 +4,7 @@ import javax.websocket.Session;
 
 public class ChatUser {
     private Session session;
-    private int id;
+    private int id;//聊天对方
 
     public Session getSession() {
         return session;

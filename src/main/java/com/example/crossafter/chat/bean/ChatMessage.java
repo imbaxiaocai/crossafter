@@ -5,7 +5,7 @@ public class ChatMessage {
     private int sender;//发送方
     private int receiver;//接收方
     private String sendtime;//发送时间
-    private int status; //是否已读
+    private int status; //是否未读0-否1-是
     private String content; //聊天内容
 
     public int getMsgid() {
