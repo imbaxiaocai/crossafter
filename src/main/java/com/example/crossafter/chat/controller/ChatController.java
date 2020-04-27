@@ -25,6 +25,20 @@ public class ChatController {
     @Autowired
     private CheckJson checkJson;
     //翻译
+    @RequestMapping("/translate")
+    public void ckt_translate(@RequestBody Object obj, HttpServletResponse response) throws IOException {
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"message")){
+            respEntity = chatService.translate(jsonObject.getString("message"));
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
     //获取聊天对象列表（前端依旧需要在没与某人聊天时进行新消息的轮询获取）
     @RequestMapping("/getlist")
     public void ckt_getChatList(@RequestBody Object obj, HttpServletResponse response) throws IOException {
