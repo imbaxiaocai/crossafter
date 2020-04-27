@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.recommend.dao.RecommendMapper">
-    <resultMap id="BaseResultMap" type="com.example.crossafter.goods.bean.Evaluation" >
+    <resultMap id="BaseResultMap1" type="com.example.crossafter.goods.bean.Evaluation" >
         <id column="gid" property="gid" jdbcType="INTEGER" />
         <result column="evaluation" property="evaluation" jdbcType="DOUBLE" />
         <result column="weight" property="weight" jdbcType="DOUBLE" />
         <result column="amount" property="amount" jdbcType="INTEGER" />
     </resultMap>
-    <select id="getAll" resultMap="BaseResultMap">
+    <select id="getAll" resultMap="BaseResultMap1">
         select * from evaluation
     </select>
     <update id="updateWR" >
         update evaluation set weight=${weight} where gid=${gid};
     </update>
+    <select id="getAllEvaluationByUid" resultMap="com.example.crossafter.goods.bean.EvalDetail">
+        select gid, evaluation from evaldetail where uid=${uid};
+    </select>
+    <select id="getUidByGid" resultMap="int">
+        select uid from evaldetail where gid=${gid} and evaluation>=${eva};
+    </select>
+    <select id="getAllEvaluationByGid" resultMap="com.example.crossafter.goods.bean.EvalDetail">
+        select uid, evaluation from evaldetail where gid=${gid};
+    </select>
 </mapper>
