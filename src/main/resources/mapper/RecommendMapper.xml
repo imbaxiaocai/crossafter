@@ -13,13 +13,13 @@
     <update id="updateWR" >
         update evaluation set weight=${weight} where gid=${gid};
     </update>
-    <select id="getAllEvaluationByUid" resultMap="com.example.crossafter.goods.bean.EvalDetail">
+    <select id="getAllEvaluationByUid" resultType="com.example.crossafter.goods.bean.EvalDetail">
         select gid, evaluation from evaldetail where uid=${uid};
     </select>
-    <select id="getUidByGid" resultMap="int">
+    <select id="getUidByGid" resultType="int">
         select uid from evaldetail where gid=${gid} and evaluation>=${eva};
     </select>
-    <select id="getAllEvaluationByGid" resultMap="com.example.crossafter.goods.bean.EvalDetail">
+    <select id="getAllEvaluationByGid" resultType="com.example.crossafter.goods.bean.EvalDetail">
         select uid, evaluation from evaldetail where gid=${gid};
     </select>
 </mapper>
