@@ -29,6 +29,8 @@ public class UserServiceImpl implements UserService{
     public RespEntity register(User user) throws IOException {
         int result;
         RespEntity respEntity = new RespEntity();
+        //默认给予10000初始金额
+        user.setWallet(10000.00);
         try {
             user.setUpsw(DigestUtils.md5DigestAsHex(user.getUpsw().getBytes()));
             result = userMapper.addUser(user);

@@ -22,10 +22,4 @@
     <select id="getAllEvaluationByGid" resultType="com.example.crossafter.goods.bean.EvalDetail">
         select uid, evaluation from evaldetail where gid=${gid};
     </select>
-    <select id="getUidByGid" resultType="int">
-        select uid from evaldetail where gid=${gid};
-    </select>
-    <select id="getGidByUid" resultType="int">
-        select gid from evaldetail where uid=${uid} and evaluation>=${eva};
-    </select>
 </mapper>

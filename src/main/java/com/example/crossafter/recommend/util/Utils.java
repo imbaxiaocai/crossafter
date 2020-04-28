@@ -13,12 +13,9 @@ import java.util.Map.Entry;
 import com.example.crossafter.goods.bean.EvalDetail;
 
 public class Utils {
-	public static final int MIN_SCORE = 10;			//进入榜单需要的最少评价人数
-	public static final int MAX_USER_COUNT = 10;	//相似用户的最大选取数目
-	public static final int MAX_RECOMMEND = 50;		//单个推荐算法最大推荐商品数目
-	public static final int MAX_GOOD_COUNT = 10;	//相似商品的最大选取数目
-	public static final double LIKE_EVALUATION = 3;	//用户对喜欢商品的评分
-	public static final int RUI = 1;				//简化Rui
+	public static final int MIN_SCORE = 10;	//进入榜单需要的最少评价人数
+	public static final int MAX_COUNT = 10;	//相似用户的最大选取数目
+	public static final int MAX_RECOMMEND = 30;	//单个推荐算法最大推荐商品数目
 	/*
 	 * 计算商品权重
 	 * @param
@@ -27,7 +24,7 @@ public class Utils {
 	 * int v 	商品的评价人数
 	 * @return double 商品的权重值
 	 */
-	public static double getWR(double R, double C, int v) {
+	public double getWR(double R, double C, int v) {
 		if (v < MIN_SCORE) {
 			return -1;		//商品评分人数不足
 		}
@@ -42,7 +39,7 @@ public class Utils {
 	 * Map<Integer, Integer> Y 用户Y对商品的评价数据集
 	 * @return double 用户X与用户Y的相似度
 	 */
-	public static double getSim(Map<Integer, Double> X, Map<Integer, Double> Y) {
+	public double getSim(Map<Integer, Double> X, Map<Integer, Double> Y) {
 		int dot = 0;	//X与Y数量集的点乘结果
 		for (Integer gid : X.keySet()) {
 			if (Y.containsKey(gid)) {
@@ -56,7 +53,7 @@ public class Utils {
 	}
 	
 	//生成用户喜爱商品的数据集
-	public static Map<Integer, Double> getGoodData(List<EvalDetail> list){
+	public Map<Integer, Double> getGoodData(List<EvalDetail> list){
 		Map<Integer, Double> X = new HashMap<Integer, Double>();
 		for (EvalDetail e : list) {
     		if (X.containsKey(e.getGid())) {
@@ -68,7 +65,7 @@ public class Utils {
 	}
 	
 	//map按值降序排序
-	public static Map<Integer, Double> sortByValue(Map<Integer, Double> m){
+	public Map<Integer, Double> sortByValue(Map<Integer, Double> m){
 		if (m == null || m.isEmpty()) {
 			return null;
 		}
@@ -90,17 +87,5 @@ public class Utils {
 			sortm.put(temp.getKey(), temp.getValue());
 		}
 		return sortm;
-	}
-	
-	/*
-	 * 计算商品相似度
-	 * @param
-	 * int Ni 喜欢商品i的用户数
-	 * int Nj 喜欢商品j的用户数
-	 * int Nij 同时喜欢i和j的用户数
-	 * @return double i和j的商品相似度w
-	 */
-	public static double getW(int Ni, int Nj, int Nij) {
-		return (double)Nij / Math.sqrt(Ni * Nj);
 	}
 }

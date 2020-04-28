@@ -23,8 +23,4 @@ public interface RecommendMapper {
     List<Integer> getUidByGid(@Param("gid") int gid, @Param("eva") double eva);
     //商品i的评价数据集
     List<EvalDetail> getAllEvaluationByGid(@Param("gid") int gid);
-    
-    List<Integer> getUidByGid(@Param("gid") int gid);
-    
-    List<Integer> getGidByUid(@Param("uid") int uid, @Param("eva") double eva);
 }

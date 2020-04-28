@@ -5,7 +5,7 @@ public class User{
     private String uname;
     private String upsw;
     private String rname;//真名
-    private String ID;
+    private String idcard;
     private String phonenumber;
     private String location;
     private double wallet;
@@ -41,14 +41,6 @@ public class User{
 
     public void setRname(String rname) {
         this.rname = rname;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
     }
 
     public String getPhonenumber() {
@@ -100,4 +92,19 @@ public class User{
     }
 
 
+    public int getUsertype() {
+        return usertype;
+    }
+
+    public void setUsertype(int usertype) {
+        this.usertype = usertype;
+    }
+
+    public String getIdcard() {
+        return idcard;
+    }
+
+    public void setIdcard(String idcard) {
+        this.idcard = idcard;
+    }
 }

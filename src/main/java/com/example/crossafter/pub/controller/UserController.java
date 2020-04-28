@@ -57,7 +57,7 @@ public class UserController {
             //token通过
             if(sysval.equals(request.getParameter("value"))){
                 User user = new User();
-                user.setID(request.getParameter("uid"));
+                user.setUid(Integer.parseInt(request.getParameter("uid")));
                 respEntity = userService.setAvater(request,user);
             }
             else{
