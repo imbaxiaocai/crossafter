@@ -10,7 +10,7 @@
     <select id="getSprice" parameterType="int" resultType="double">
         SELECT sprice FROM goods WHERE gid=#{gid}
     </select>
-    <insert id="addGood" parameterType="com.example.crossafter.goods.bean.Good">
+    <insert id="addGood" parameterType="com.example.crossafter.goods.bean.Good" useGeneratedKeys="true" keyProperty="gid" keyColumn="gid">
         insert into goods (gname,fid,gimg,gprice,gsales,gtype,sprice,duration,amount,content,description) values (#{gname},#{fid},#{gimg},#{gprice},#{gsales},#{gtype},#{sprice},#{duration},#{amount},#{content},#{description});
     </insert>
     <select id="getAmount" parameterType="int" resultType="int">

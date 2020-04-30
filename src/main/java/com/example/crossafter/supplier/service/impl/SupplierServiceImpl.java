@@ -155,14 +155,15 @@ public class SupplierServiceImpl implements SupplierService{
             String filepath = "/usr/www/waibaoimg/goods";
             File img = new File(filepath,filename);
             multipartFile.transferTo(img);
+            //添加商品
+            goodMapper.addGood(good);
             //数据入库
             Evaluation evaluation = new Evaluation();
             //评价为空
             evaluation.setGid(good.getGid());
             evaluation.setWeight(-1);
             evaluationMapper.evalInit(evaluation);
-            //添加商品
-            goodMapper.addGood(good);
+
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
