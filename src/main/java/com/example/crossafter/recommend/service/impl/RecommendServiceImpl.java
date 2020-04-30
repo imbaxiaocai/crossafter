@@ -35,7 +35,8 @@ public class RecommendServiceImpl implements RecommendService{
             double C = sum / list.size();
 
             for (Evaluation e : list) {
-                double WR = new Utils().getWR(e.getEvaluation(), C, e.getAmount());
+                new Utils();
+				double WR = Utils.getWR(e.getEvaluation(), C, e.getAmount());
                 recommendMapper.updateWR(WR, e.getGid());
             }
         }catch(Exception e) {
@@ -46,39 +47,56 @@ public class RecommendServiceImpl implements RecommendService{
         return respEntity;
     }
     
+    @Override
+	public RespEntity updateRecommend(int uid) {
+		// TODO Auto-generated method stub
+    	RespEntity respEntity = new RespEntity();
+    	List<Integer> recommend = new LinkedList<>();
+    	//权重推荐
+    	recommend.addAll(recommendMapper.getTopEvaluation());
+    	//基于用户推荐
+    	recommend.addAll(getP_userBased(uid));
+    	//基于商品推荐
+    	recommend.addAll(getP_userBased(uid));
+    	
+    	//推荐结果写入
+    	
+		return respEntity;
+	}
+    
     /*
      * 用户uid的相似用户列表
      * @param int uid	用户编号
      * @return Map<Integer, Double> key为用户id value为用户之间的相似值
      */
     private Map<Integer, Double> getSim(int uid){
-    	Utils utils = new Utils();
+//    	Utils utils = new Utils();
     	Map<Integer, Double> simUid = new LinkedHashMap<>();	//最终结果数据集
     	List<EvalDetail> list = recommendMapper.getAllEvaluationByUid(uid);
-    	Map<Integer, Double> X = utils.getGoodData(list);
+    	Map<Integer, Double> X = Utils.getGoodData(list);
     	//筛选相似用户
     	Set<Integer> uidSet = new HashSet<>();
     	for (EvalDetail e : list) {
-			List<Integer> uidlist = recommendMapper.getUidByGid(e.getGid(), e.getEvaluation());
+			List<Integer> uidlist = recommendMapper.getUidByGid(e.getGid());
 			uidSet.addAll(uidlist);
 		}
     	//计算相似用户的相似度并选出前10位相似用户
     	for (Integer u : uidSet) {
 			List<EvalDetail> uList = recommendMapper.getAllEvaluationByUid(u);
-			Map<Integer, Double> Y = utils.getGoodData(uList);
-			double sim = utils.getSim(X, Y);
+			Map<Integer, Double> Y = Utils.getGoodData(uList);
+			double sim = Utils.getSim(X, Y);
 			
-			if (simUid.size() < Utils.MAX_COUNT) {
+			if (simUid.size() < Utils.MAX_USER_COUNT) {
 				simUid.put(u, sim);
-				if (simUid.size() == Utils.MAX_COUNT) {
-					simUid = utils.sortByValue(simUid);
+				if (simUid.size() == Utils.MAX_USER_COUNT) {
+					simUid = Utils.sortByValue(simUid);
 				}
 			}else {
 				Map.Entry<Integer, Double> entry = simUid.entrySet().iterator().next();
 				if (sim > entry.getValue()) {
 					simUid.remove(entry.getKey());
 					simUid.put(u, sim);
-					simUid = utils.sortByValue(simUid);
+					simUid = Utils.sortByValue(simUid);
 				}
 			}
 		}
@@ -86,7 +104,7 @@ public class RecommendServiceImpl implements RecommendService{
     }
     
     //用户X的候选商品
-    private Set<Integer> getCandidate(int uid){
+    private Set<Integer> getCandidate_userBased(int uid){
     	Set<Integer> candidate = new HashSet<>();
     	List<EvalDetail> uList = recommendMapper.getAllEvaluationByUid(uid);
     	Set<Integer> uLike = new HashSet<>();	//用户u已经有评分的商品号
@@ -109,10 +127,10 @@ public class RecommendServiceImpl implements RecommendService{
     }
     
     //用户对候选商品的感兴趣程度
-    private List<Integer> getP(int uid){
+    private List<Integer> getP_userBased(int uid){
     	List<Integer> result = new LinkedList<Integer>();
     	
-    	Set<Integer> candidate = getCandidate(uid);
+    	Set<Integer> candidate = getCandidate_userBased(uid);
     	Map<Integer, Double> simUser = getSim(uid);
     	for (Integer i : candidate) {
 			List<EvalDetail> list = recommendMapper.getAllEvaluationByGid(i);
@@ -134,4 +152,104 @@ public class RecommendServiceImpl implements RecommendService{
 		}
     	return result;
     }
+    
+    /*
+     * 商品gid的相似商品列表
+     * @param int gid	商品编号
+     * @return Map<Integer, Double> key为商品id value为商品之间的相似值
+     */
+    private Map<Integer, Double> getW(int gid){
+    	Map<Integer, Double> result = new LinkedHashMap<>();
+    	
+    	//寻找购买统一商品的用户
+    	List<Integer> userList = recommendMapper.getUidByGid(gid);
+    	//筛选商品
+    	Set<Integer> gids = new HashSet<>();
+    	for (int i : userList) {
+			List<EvalDetail> gList = recommendMapper.getAllEvaluationByUid(i);
+			
+			for (EvalDetail evalDetail : gList) {
+				gids.add(evalDetail.getGid());
+			}
+		}
+    	//计算相似商品的相似度并选取前10位
+    	for (Integer i : gids) {
+			List<Integer> uList = recommendMapper.getUidByGid(i);
+			
+			//同时喜欢两种商品的人数
+			int count = 0;
+			for (Integer integer : uList) {
+				if (userList.contains(integer)) {
+					count ++;
+				}
+			}
+			
+			double w = Utils.getW(userList.size(), uList.size(), count);
+			
+			if (result.size() < Utils.MAX_GOOD_COUNT) {
+				result.put(i, w);
+				if (result.size() == Utils.MAX_GOOD_COUNT) {
+					result = Utils.sortByValue(result);
+				}
+			}else {
+				Map.Entry<Integer, Double> entry = result.entrySet().iterator().next();
+				if (w > entry.getValue()) {
+					result.remove(entry.getKey());
+					result.put(i, w);
+					result = Utils.sortByValue(result);
+				}
+			}
+		}
+    	return result;
+    }
+    
+    //候选商品
+    private Set<Integer> getCandidate_itemBased(int uid){
+    	Set<Integer> candidates = new HashSet<>();
+    	List<Integer> likeGids = recommendMapper.getGidByUid(uid, Utils.LIKE_EVALUATION);	//用户uid喜欢的商品
+    	
+    	for (Integer i : likeGids) {
+			Map<Integer, Double> cand = getW(i);
+			for (int j : cand.keySet()) {
+				
+				if (!(likeGids.contains(j))) {
+					candidates.add(j);
+				}
+			}
+		}
+    	
+    	return candidates;
+    }
+    //用户对商品的感兴趣程度
+    private List<Integer> getP_itemBased(int uid){
+    	List<Integer> result = new LinkedList<>();
+    	
+    	List<Integer> likeGids = recommendMapper.getGidByUid(uid, Utils.LIKE_EVALUATION);	//用户uid喜欢的商品
+    	Set<Integer> candidates = getCandidate_itemBased(uid);
+    	for (int j : candidates) {				//j为目标商品
+			Map<Integer, Double> w = getW(j);	//j的相似商品列表
+			
+			double p = 0;
+			for (Integer i : likeGids) {
+				if (w.containsKey(i)) {
+					p += w.get(i) * Utils.RUI;
+				}
+			}
+			
+			int k = 0;
+			for(;k < result.size(); k ++) {
+				if (p > result.get(k)) {
+					break;
+				}
+			}
+			result.add(k, j);
+			if (result.size() > Utils.MAX_RECOMMEND) {
+				result.remove(Utils.MAX_RECOMMEND);
+			}
+		}
+    	
+    	return result;
+    }
+
+	
 }
