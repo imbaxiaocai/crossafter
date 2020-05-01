@@ -52,7 +52,7 @@ public class CheckToken {
                 String uval = utkn.getValue();
                 String sysval = redisUtils.getToken(utkn.getKey());
                 //token校验通过
-                if (uval != null && !"".equals(uval) && uval.equals(sysval)) {
+                if (uval != null && !"".equals(uval) && uval.equals(sysval)&&sysval!=null&&sysval!="") {
                     redisUtils.setToken(utkn.getKey(),sysval);
                     pjp.proceed();
                     return;

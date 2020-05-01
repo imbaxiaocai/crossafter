@@ -49,7 +49,7 @@ public class SupplierController {
         if(request.getParameter("key")!=null&&request.getParameter("value")!=null){
             String sysval = redisUtils.getToken(request.getParameter("key"));
             //token通过
-            if(sysval.equals(request.getParameter("value"))){
+            if(sysval!=""&&sysval!=null&&sysval.equals(request.getParameter("value"))){
                 Good good = new Good();
                 good.setContent(Integer.parseInt(request.getParameter("content")));
                 good.setDescription(request.getParameter("description"));

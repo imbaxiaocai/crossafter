@@ -59,7 +59,7 @@ public class UserController {
         if(request.getParameter("key")!=null&&request.getParameter("value")!=null){
             String sysval = redisUtils.getToken(request.getParameter("key"));
             //token通过
-            if(sysval.equals(request.getParameter("value"))){
+            if(sysval!=""&&sysval!=null&&sysval.equals(request.getParameter("value"))){
                 User user = new User();
                 user.setUid(Integer.parseInt(request.getParameter("uid")));
                 respEntity = userService.setAvater(request,user);
