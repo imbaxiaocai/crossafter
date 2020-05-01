@@ -107,4 +107,18 @@ public class UserServiceImpl implements UserService{
         }
         return  respEntity;
     }
+    public RespEntity getUserInfo(int uid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            User user = userMapper.getUserInfo(uid);
+            respEntity.setData(user);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
 }

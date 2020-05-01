@@ -5,8 +5,10 @@ import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.User;
 import com.example.crossafter.pub.service.UserService;
+import com.example.crossafter.pub.utils.CheckJson;
 import com.example.crossafter.pub.utils.RedisUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private CheckJson checkJson;
     //用户注册
     @RequestMapping(value="/register",produces = "application/json;charset=UTF-8")
     public void register(@RequestBody User user, HttpServletResponse response) throws IOException{
@@ -66,6 +70,21 @@ public class UserController {
         }
         else {
             respEntity.setHead(RespHead.TOKEN_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //获取用户信息
+    @RequestMapping("/getuserinfo")
+    public void ckt_getUserInfo(@RequestBody Object obj, HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"uid")){
+            respEntity = userService.getUserInfo(jsonObject.getInt("uid"));
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
         }
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(respEntity));

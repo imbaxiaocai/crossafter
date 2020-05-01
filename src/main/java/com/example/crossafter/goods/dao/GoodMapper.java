@@ -21,4 +21,5 @@ public interface GoodMapper {
     String getGname(int gid);
     double getGprice(int gid);
     List<Good> searchGoods(String gname);
+    List<Good> getGoodsByFid(int fid);
 }

@@ -112,6 +112,20 @@ public class SupplierController {
         response.getWriter().close();
     }
     //查看商品库存
+    @RequestMapping("/getallgoods")
+    public void ckt_getGoodsByFid(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"fid")){
+            respEntity = supplierService.getGoodsByFid(jsonObject.getInt("fid"));
+        }
+        else{
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
     //修改商品库存
     //查看零售商库存
     @RequestMapping("/getinventorybyfid")

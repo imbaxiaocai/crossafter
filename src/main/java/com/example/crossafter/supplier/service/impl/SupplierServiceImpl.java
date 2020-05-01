@@ -173,5 +173,18 @@ public class SupplierServiceImpl implements SupplierService{
         }
         return  respEntity;
     }
-
+    public RespEntity getGoodsByFid(int fid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            List<Good> goods = goodMapper.getGoodsByFid(fid);
+            respEntity.setData(goods);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
 }

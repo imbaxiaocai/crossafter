@@ -31,4 +31,7 @@
     <select id="searchGoods" parameterType="String" resultType="com.example.crossafter.goods.bean.Good">
         SELECT * FROM goods WHERE gname LIKE #{gname};
     </select>
+    <select id="getGoodsByFid" parameterType="int" resultType="com.example.crossafter.goods.bean.Good">
+        SELECT * from goods WHERE fid=#{fid};
+    </select>
 </mapper>
