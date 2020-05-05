@@ -39,6 +39,7 @@ public class TrolleyServiceImpl implements TrolleyService{
                 trolley.setDuration(good.getDuration());
                 trolley.setGimg(good.getGimg());
                 trolley.setFimg(userMapper.getAvatarById(good.getFid()));
+                trolley.setFid(good.getFid());
                 System.out.println(trolley.getGname());
                 trolleyMapper.addToTrolley(trolley);
             }

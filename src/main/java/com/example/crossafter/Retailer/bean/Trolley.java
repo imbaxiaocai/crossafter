@@ -12,6 +12,7 @@ public class Trolley{
     private int duration;
     private String gimg;
     private String fimg;
+    private int fid;
     public int getGid() {
         return gid;
     }
@@ -82,5 +83,13 @@ public class Trolley{
 
     public void setFimg(String fimg) {
         this.fimg = fimg;
+    }
+
+    public int getFid() {
+        return fid;
+    }
+
+    public void setFid(int fid) {
+        this.fid = fid;
     }
 }
