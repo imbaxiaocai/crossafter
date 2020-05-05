@@ -34,4 +34,7 @@
     <select id="getGoodsByFid" parameterType="int" resultType="com.example.crossafter.goods.bean.Good">
         SELECT * from goods WHERE fid=#{fid};
     </select>
+    <update id="setSales" parameterType="com.example.crossafter.goods.bean.Good">
+        UPDATE goods SET sales = #{sales} WHERE gid = #{gid}
+    </update>
 </mapper>

@@ -119,6 +119,10 @@ public class OrderServiceImpl implements OrderService{
             user.setWallet(wallet);
             user.setUname(uname);
             userMapper.setWallet(user);
+            //销量增加
+            Good good = goodMapper.getGoodById(gid);
+            good.setGsales(good.getGsales()+order.getAmount());
+            goodMapper.setSales(good);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
