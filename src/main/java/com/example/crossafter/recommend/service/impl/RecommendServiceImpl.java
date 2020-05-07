@@ -60,7 +60,8 @@ public class RecommendServiceImpl implements RecommendService{
     	recommend.addAll(getP_userBased(uid));
     	
     	//推荐结果写入
-    	
+    	respEntity.setData(recommend);
+    	respEntity.setHead(RespHead.SUCCESS);
 		return respEntity;
 	}
     
