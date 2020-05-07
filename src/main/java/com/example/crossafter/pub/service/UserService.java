@@ -9,4 +9,6 @@ import java.io.IOException;
 public interface UserService {
     RespEntity register(User user) throws IOException;
     RespEntity login(User user) throws IOException;
+    RespEntity setAvater(HttpServletRequest request,User user);
+    RespEntity getUserInfo(int uid);
 }

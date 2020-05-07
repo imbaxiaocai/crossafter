@@ -30,6 +30,8 @@ public class EvalServiceImpl implements EvalService{
         RespEntity respEntity = new RespEntity();
         try {
             //添加评价
+            String uname = userMapper.getUnameById(evaluation.getUid());
+            evaluation.setUname(uname);
             evalDetailMapper.addEvaluation(evaluation);
             //修改状态为已评价
             orderMapper.evalOrder(evaluation.getOid());
@@ -55,6 +57,20 @@ public class EvalServiceImpl implements EvalService{
         try{
             List<EvalDetail> evalDetails = evalDetailMapper.getAllEvalDetail(gid);
             respEntity.setData(evalDetails);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return respEntity;
+    }
+    public RespEntity getEvaluationByGid(int gid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            Evaluation evaluation = evaluationMapper.getEvalByGid(gid);
+            respEntity.setData(evaluation);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

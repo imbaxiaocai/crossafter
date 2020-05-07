@@ -10,8 +10,8 @@
     <select id="getSprice" parameterType="int" resultType="double">
         SELECT sprice FROM goods WHERE gid=#{gid}
     </select>
-    <insert id="addGood" parameterType="com.example.crossafter.goods.bean.Good">
-        insert into goods (gname,fid,gimg,gpirce,gsales,gtype,sprice,duration,amount,content,description) values (#{gname},#{fid},#{gimg},#{gprice},#{gsales},#{gtype},#{sprice},#{duration},#{amount},#{content},#{description});
+    <insert id="addGood" parameterType="com.example.crossafter.goods.bean.Good" useGeneratedKeys="true" keyProperty="gid" keyColumn="gid">
+        insert into goods (gname,fid,gimg,gprice,gsales,gtype,sprice,duration,amount,content,description) values (#{gname},#{fid},#{gimg},#{gprice},#{gsales},#{gtype},#{sprice},#{duration},#{amount},#{content},#{description});
     </insert>
     <select id="getAmount" parameterType="int" resultType="int">
         SELECT amount FROM goods WHERE gid=#{gid}
@@ -22,10 +22,19 @@
     <select id="getGname" parameterType="int" resultType="String">
         SELECT gname FROM goods WHERE gid=#{gid};
     </select>
-    <select id="getGprice" resultType="int" parameterType="double">
+    <select id="getGprice" resultType="double" parameterType="int">
         SELECT gprice FROM goods WHERE gid=#{gid};
     </select>
     <select id="getDuration" parameterType="int" resultType="int">
         SELECT duration FROM goods WHERE gid=#{gid};
     </select>
+    <select id="searchGoods" parameterType="String" resultType="com.example.crossafter.goods.bean.Good">
+        SELECT * FROM goods WHERE gname LIKE #{gname};
+    </select>
+    <select id="getGoodsByFid" parameterType="int" resultType="com.example.crossafter.goods.bean.Good">
+        SELECT * from goods WHERE fid=#{fid};
+    </select>
+    <update id="setSales" parameterType="com.example.crossafter.goods.bean.Good">
+        UPDATE goods SET sales = #{sales} WHERE gid = #{gid}
+    </update>
 </mapper>

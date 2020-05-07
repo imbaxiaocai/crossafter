@@ -42,4 +42,19 @@ public class GoodServiceImpl implements GoodService{
         }
         return  respEntity;
     }
+    public RespEntity searchGoods(String gname){
+        RespEntity respEntity = new RespEntity();
+        try {
+            gname = "%" + gname +"%";
+            List<Good> result = goodMapper.searchGoods(gname);
+            respEntity.setData(result);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return  respEntity;
+        }
+        return  respEntity;
+    }
 }

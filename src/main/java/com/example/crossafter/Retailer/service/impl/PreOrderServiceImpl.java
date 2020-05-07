@@ -32,6 +32,27 @@ public class PreOrderServiceImpl implements PreOrderService {
     public RespEntity addPreOrder(ArrayList<PreOrder> preOrders,String uname){
         RespEntity respEntity = new RespEntity();
         try {
+            //将已预定从购物车中除去
+            ArrayList<Integer> lack = new ArrayList<Integer>();
+            for (int k=0;k<preOrders.size();k++){
+                //厂商库存减少
+                int amount = goodMapper.getAmount(preOrders.get(k).getGid());
+                if(amount<preOrders.get(k).getAmount()){
+                    lack.add(preOrders.get(k).getGid());
+                }
+                if(lack.size()==0) {
+                    goodMapper.setAmount(amount - preOrders.get(k).getAmount());
+                    Trolley trolley = new Trolley();
+                    trolley.setGid(preOrders.get(k).getGid());
+                    trolley.setUid(preOrders.get(k).getRid());
+                    trolleyMapper.deleteFromTro(trolley);
+                }
+            }
+            if(lack.size()>0){
+                respEntity.setData(lack);
+                respEntity.setHead(RespHead.LACK_OF_AMOUNT);
+                return respEntity;
+            }
             //计算总保证金
             double sum = 0;
             for(int j=0;j<preOrders.size();j++){
@@ -54,13 +75,6 @@ public class PreOrderServiceImpl implements PreOrderService {
                 user.setUname(uname);
                 user.setWallet(wallet-sum);
                 userMapper.setWallet(user);
-            }
-            //将已预定从购物车中除去
-            for (int k=0;k<preOrders.size();k++){
-                Trolley trolley = new Trolley();
-                trolley.setGid(preOrders.get(k).getGid());
-                trolley.setUid(preOrders.get(k).getRid());
-                trolleyMapper.deleteFromTro(trolley);
             }
             //添加预订单
             for (int i=0;i<preOrders.size();i++){

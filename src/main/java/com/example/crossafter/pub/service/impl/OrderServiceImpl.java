@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService{
                 double sum = 0;
                 double wallet =userMapper.getWallet(order.getUname());
                 sum = order.getAmount()*(good.getGprice()-good.getSprice());
-                order.setSgpirce(sum);
+                order.setSgprice(sum);
                 if(wallet>=sum){
                     User user = new User();
                     user.setWallet(wallet-sum);
@@ -119,6 +119,10 @@ public class OrderServiceImpl implements OrderService{
             user.setWallet(wallet);
             user.setUname(uname);
             userMapper.setWallet(user);
+            //销量增加
+            Good good = goodMapper.getGoodById(gid);
+            good.setGsales(good.getGsales()+order.getAmount());
+            goodMapper.setSales(good);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
@@ -132,6 +136,7 @@ public class OrderServiceImpl implements OrderService{
         RespEntity respEntity = new RespEntity();
         try {
             List<Order> orders = orderMapper.getOrderByRid(rid);
+            respEntity.setData(orders);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
@@ -145,6 +150,7 @@ public class OrderServiceImpl implements OrderService{
         RespEntity respEntity = new RespEntity();
         try {
             List<Order> orders = orderMapper.getOrderByFid(fid);
+            respEntity.setData(orders);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

@@ -1,10 +1,10 @@
 package com.example.crossafter.goods.bean;
 
 public class Evaluation {
-    private int gid;
-    private double evaluation;
-    private int weight;
-    private int amount;
+    private int gid;//商品id
+    private double evaluation;//评价均分
+    private double weight;//权重
+    private int amount;//评价数
 
     public int getGid() {
         return gid;
@@ -22,11 +22,11 @@ public class Evaluation {
         this.evaluation = evaluation;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 

@@ -31,7 +31,7 @@ public class EvalController {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"evaluation")){
-            EvalDetail evaluation = (EvalDetail) JSONObject.toBean(jsonObject.getJSONObject("evaluation"),Evaluation.class);
+            EvalDetail evaluation = (EvalDetail) JSONObject.toBean(jsonObject.getJSONObject("evaluation"),EvalDetail.class);
             respEntity = evalService.addEvaluation(evaluation);
         }
         else {
@@ -48,6 +48,21 @@ public class EvalController {
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"gid")){
             respEntity = evalService.getAllEvalDetail(jsonObject.getInt("gid"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //获取某一商品总评
+    @RequestMapping("/getevaluation")
+    public void  ckt_getEvaluationByGid(@RequestBody Object obj,HttpServletResponse response) throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"gid")){
+            respEntity = evalService.getEvaluationByGid(jsonObject.getInt("gid"));
         }
         else {
             respEntity.setHead(RespHead.REQ_ERROR);

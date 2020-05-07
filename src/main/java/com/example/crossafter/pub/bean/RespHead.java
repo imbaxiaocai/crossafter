@@ -7,7 +7,8 @@ public enum RespHead {
     FAILED(100,"失败"),
     TOKEN_ERROR(102,"非法Token"),
     REQ_ERROR(101,"非法请求"),
-    LACK_OF_BALANCE(103,"余额不足");
+    LACK_OF_BALANCE(103,"余额不足"),
+    LACK_OF_AMOUNT(104,"库存不足");
     private int code;
     private String msg;
 

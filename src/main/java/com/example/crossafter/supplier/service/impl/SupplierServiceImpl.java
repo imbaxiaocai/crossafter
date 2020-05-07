@@ -155,14 +155,15 @@ public class SupplierServiceImpl implements SupplierService{
             String filepath = "/usr/www/waibaoimg/goods";
             File img = new File(filepath,filename);
             multipartFile.transferTo(img);
+            //添加商品
+            goodMapper.addGood(good);
             //数据入库
             Evaluation evaluation = new Evaluation();
             //评价为空
             evaluation.setGid(good.getGid());
             evaluation.setWeight(-1);
             evaluationMapper.evalInit(evaluation);
-            //添加商品
-            goodMapper.addGood(good);
+
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){
@@ -172,5 +173,18 @@ public class SupplierServiceImpl implements SupplierService{
         }
         return  respEntity;
     }
-
+    public RespEntity getGoodsByFid(int fid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            List<Good> goods = goodMapper.getGoodsByFid(fid);
+            respEntity.setData(goods);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return respEntity;
+        }
+        return  respEntity;
+    }
 }

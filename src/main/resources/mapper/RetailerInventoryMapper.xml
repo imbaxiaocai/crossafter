@@ -5,10 +5,10 @@
         insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,gname,uname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{gname},#{uname});
     </insert>
     <insert id="addToHis" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailinventory_hos (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
+        insert into retailinventory_his (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
     </insert>
     <select id="getInventory" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        SELECT * FROM retailer_inventory WHERE uid=#{0} AND end_date>=#{1};
+        SELECT * FROM retailer_inventory WHERE uid=#{uid} AND end_date>=#{now};
     </select>
     <select id="getExpired" parameterType="String" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
         SELECT * FROM retailer_inventory WHERE end_date &lt; #{now} OR amount=0;
@@ -23,7 +23,7 @@
         UPDATE retailer_inventory SET amount =#{amount} WHERE poid = #{poid};
     </update>
     <select id="getInventoryByFid" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        SELECT * FROM retailer_inventory WHERE WHERE fid=#{0} AND end_date>=#{1};
+        SELECT * FROM retailer_inventory WHERE WHERE fid=#{uid} AND end_date>=#{now};
     </select>
     <select id="getInventoryByPoid" parameterType="int" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
         SELECT * FROM retailer_inventory WHERE poid=#{poid};

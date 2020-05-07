@@ -1,12 +1,12 @@
 package com.example.crossafter.goods.bean;
 
 public class EvalDetail {
-    private int oid;
-    private int gid;
-    private int uid;
-    private String content;
-    private double evaluation;
-    private String uname;
+    private int oid;//订单号
+    private int gid;//商品id
+    private int uid;//零售商id
+    private String content;//评价内容
+    private double evaluation;//评分
+    private String uname;//零售商名
 
     public int getOid() {
         return oid;
