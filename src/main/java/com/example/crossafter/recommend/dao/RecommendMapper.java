@@ -29,4 +29,8 @@ public interface RecommendMapper {
     List<Integer> getGidByUid(@Param("uid") int uid, @Param("eva") double eva);
     
     List<Integer> getTopEvaluation();
+    
+    int getCountByUid(@Param("uid")int uid);
+    
+    int getweightByGid(@Param("gid")int gid);
 }
