@@ -6,6 +6,13 @@ public interface RecommendService {
     //更新商品的权重值
     RespEntity updateWR();
     
-    //更新用户的推荐商品列表
-    RespEntity updateRecommend(int uid);
+    /*
+     * 商品推荐
+     * @param
+     * int uid 用户编号
+     * int reCounts 推荐数量
+     * @retrun RespEntity
+     */
+    
+    RespEntity updateRecommend(int uid, int reCounts);
 }

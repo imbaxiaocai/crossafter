@@ -34,4 +34,12 @@
     <select id="getTopEvaluation" resultType="int">
     	select top 50 gid from evaluation order by weight desc;
     </select>
+    
+    <select id="getCountByUid" resultType="int">
+    	select count from evaldetail where uid=${uid};
+    </select>
+    
+    <select id="getweightByGid" resultType="int">
+    	select weight from evaluation where gid=${gid};
+    </select>
 </mapper>

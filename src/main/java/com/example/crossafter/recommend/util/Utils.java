@@ -103,4 +103,20 @@ public class Utils {
 	public static double getW(int Ni, int Nj, int Nij) {
 		return (double)Nij / Math.sqrt(Ni * Nj);
 	}
+	
+	//选取推荐商品
+	public static List<Integer> getRecom(
+			List<Integer> re, List<Integer> src, List<Integer> weight, double count){
+		int n = 0;
+		for (Integer integer : src) {
+			if (weight.contains(integer) && !re.contains(integer)) {
+				re.add(integer);
+				n ++;
+			}
+			if (n > count) {
+				break;
+			}
+		}
+		return re;
+	}
 }

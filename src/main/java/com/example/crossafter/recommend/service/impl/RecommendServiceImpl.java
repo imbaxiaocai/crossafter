@@ -10,6 +10,7 @@ import com.example.crossafter.recommend.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -48,16 +49,46 @@ public class RecommendServiceImpl implements RecommendService{
     }
     
     @Override
-	public RespEntity updateRecommend(int uid) {
+	public RespEntity updateRecommend(int uid, int reCounts) {
 		// TODO Auto-generated method stub
     	RespEntity respEntity = new RespEntity();
     	List<Integer> recommend = new LinkedList<>();
-    	//权重推荐
-    	recommend.addAll(recommendMapper.getTopEvaluation());
-    	//基于用户推荐
-    	recommend.addAll(getP_userBased(uid));
-    	//基于商品推荐
-    	recommend.addAll(getP_userBased(uid));
+    	//用户区分
+    	int count = recommendMapper.getCountByUid(uid);
+    	if (count <= 0) {	//新用户
+    		recommend.addAll(recommendMapper.getTopEvaluation());
+		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户
+			List<Integer> item_temp = getP_itemBased(uid).subList(0, 20);
+			List<Integer> user_temp = getP_userBased(uid).subList(0, 20);
+			List<Integer> temp = recommendMapper.getTopEvaluation();
+			
+			recommend = Utils.getRecom(recommend, item_temp, temp, reCounts * 0.2);
+			recommend = Utils.getRecom(recommend, user_temp, temp, reCounts * 0.2);
+			for (Integer integer : temp) {
+				
+				if (!recommend.contains(integer) && recommend.size() < reCounts) {
+					recommend.add(integer);
+				}
+			}
+			
+		}else {		//非数据稀疏性用户
+			List<Integer> item_temp = getP_itemBased(uid);
+			List<Integer> user_temp = getP_userBased(uid);
+			
+			recommend.addAll(item_temp.subList(0, (int) (reCounts * 0.5)));
+			recommend.addAll(user_temp.subList(0, (int) (reCounts * 0.5)));
+		}
+    	
+    	//对推荐结果按照权重排序
+    	recommend.sort(new Comparator<Integer>() {
+    		@Override
+    		public int compare(Integer o1, Integer o2) {
+    			// TODO Auto-generated method stub
+    			int o1_weight = recommendMapper.getweightByGid(o1);
+    			int o2_weight = recommendMapper.getweightByGid(o2);
+    			return o2_weight - o1_weight;
+    		}
+		});
     	
     	//推荐结果写入
     	respEntity.setData(recommend);
