@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.Retailer.dao.RetailerInventoryMapper">
     <insert id="addInventory" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,gname,uname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{gname},#{uname});
+        insert into retailer_inventory (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,gname,uname,gimg) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{gname},#{uname},#{gimg});
     </insert>
     <insert id="addToHis" parameterType="com.example.crossafter.Retailer.bean.RetailerInventory">
-        insert into retailinventory_his (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{uname},#{gname});
+        insert into retailinventory_his (poid,uid,gid,fid,status,duration,begin_date,end_date,amount,uname,gname,gimg) values (#{poid},#{uid},#{gid},#{fid},#{status},#{duration},#{begin_date},#{end_date},#{amount},#{uname},#{gname},#{gimg});
     </insert>
     <select id="getInventory" resultType="com.example.crossafter.Retailer.bean.RetailerInventory">
         SELECT * FROM retailer_inventory WHERE uid=#{uid} AND end_date>=#{now};
