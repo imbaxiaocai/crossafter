@@ -100,6 +100,7 @@ public class SupplierServiceImpl implements SupplierService{
                     retailerInventory.setAmount(preOrder.getAmount());
                     retailerInventory.setUname(userMapper.getUnameById(preOrder.getRid()));
                     retailerInventory.setGname(goodMapper.getGname(preOrder.getGid()));
+                    retailerInventory.setGimg(goodMapper.getGoodById(preOrder.getGid()).getGimg());
                     //计算日期偏移量
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
                     Date date = new Date();

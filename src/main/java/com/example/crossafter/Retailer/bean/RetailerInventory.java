@@ -14,6 +14,7 @@ public class RetailerInventory {
     private int amount;
     private String gname;
     private String uname;
+    private String gimg;
 
     public int getUid() {
         return uid;
@@ -101,5 +102,13 @@ public class RetailerInventory {
 
     public void setUname(String uname) {
         this.uname = uname;
+    }
+
+    public String getGimg() {
+        return gimg;
+    }
+
+    public void setGimg(String gimg) {
+        this.gimg = gimg;
     }
 }
