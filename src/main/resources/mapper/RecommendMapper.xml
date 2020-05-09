@@ -13,7 +13,7 @@
     <update id="updateWR" >
         update evaluation set weight=${weight} where gid=${gid};
     </update>
-    <select id="getAllEvaluationByUid" resultMap="BaseResultMap">
+    <select id="getAllEvaluationByUid" resultMap="com.example.crossafter.goods.bean.EvalDetail">
         select gid, evaluation from evaldetail where uid=${uid};
     </select>
     <!--
@@ -36,7 +36,7 @@
     </select>
     
     <select id="getCountByUid" resultType="int">
-    	select count from evaldetail where uid=${uid};
+    	select count(*) from evaldetail where uid=${uid};
     </select>
     
     <select id="getweightByGid" resultType="int">
