@@ -17,6 +17,7 @@ public class Order {
     private String uname;
     private String gname;
     private double sgprice;//额外支付金额
+    private String gimg;
     public int getId() {
         return id;
     }
@@ -143,5 +144,13 @@ public class Order {
 
     public void setSgprice(double sgprice) {
         this.sgprice = sgprice;
+    }
+
+    public String getGimg() {
+        return gimg;
+    }
+
+    public void setGimg(String gimg) {
+        this.gimg = gimg;
     }
 }

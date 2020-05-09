@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.pub.dao.OrderMapper">
     <insert id="addOrder" parameterType="com.example.crossafter.pub.bean.Order">
-        insert into `order` (rid,fid,gid,receiver,phonenumber,address,trans,status,begin_date,poid,amount,uname,gname,sgprice) values (#{rid},#{fid},#{gid},#{receiver},#{phonenumber},#{address},#{trans},#{status},#{begin_date},#{poid},#{amount},#{uname},#{gname},#{sgprice});
+        insert into `order` (rid,fid,gid,receiver,phonenumber,address,trans,status,begin_date,poid,amount,uname,gname,sgprice,gimg) values (#{rid},#{fid},#{gid},#{receiver},#{phonenumber},#{address},#{trans},#{status},#{begin_date},#{poid},#{amount},#{uname},#{gname},#{sgprice},#{gimg});
     </insert>
     <select id="getUnshippedOrder" parameterType="int" resultType="com.example.crossafter.pub.bean.Order">
         SELECT * FROM `order` WHERE fid=#{fid} AND status=0
