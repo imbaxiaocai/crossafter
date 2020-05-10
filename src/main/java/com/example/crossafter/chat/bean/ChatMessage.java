@@ -7,6 +7,7 @@ public class ChatMessage {
     private String sendtime;//发送时间
     private int status; //是否未读0-否1-是
     private String content; //聊天内容
+    private String rname;//对象用户名
 
     public int getMsgid() {
         return msgid;
@@ -54,5 +55,13 @@ public class ChatMessage {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getRname() {
+        return rname;
+    }
+
+    public void setRname(String rname) {
+        this.rname = rname;
     }
 }

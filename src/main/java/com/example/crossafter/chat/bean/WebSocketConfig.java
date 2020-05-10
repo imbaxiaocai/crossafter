@@ -2,6 +2,7 @@ package com.example.crossafter.chat.bean;
 
 import com.example.crossafter.chat.controller.ChatWebSocket;
 import com.example.crossafter.chat.dao.ChatMapper;
+import com.example.crossafter.pub.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,5 +19,9 @@ public class WebSocketConfig {
     @Autowired
     public void setChatMapper(ChatMapper chatMapper){
         ChatWebSocket.chatMapper = chatMapper;
+    }
+    @Autowired
+    public void setUserMapper(UserMapper userMapper){
+        ChatWebSocket.userMapper = userMapper;
     }
 }

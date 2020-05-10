@@ -2,19 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.crossafter.chat.dao.ChatMapper">
     <insert id="addMsg" parameterType="com.example.crossafter.chat.bean.ChatMessage">
-        insert into chat_his (sender,receiver,sendtime,status,content) values (#{sender},#{receiver},#{sendtime},#{status},#{content});
+        insert into chat_his (sender,receiver,sendtime,status,content,rname) values (#{sender},#{receiver},#{sendtime},#{status},#{content},#{rname});
     </insert>
     <update id="setMsgStatus" parameterType="com.example.crossafter.chat.bean.ChatMessage">
-        UPDATE chat_his SET status=#{status} WHERE sender=#{sender} AND receiver = #{receiver};
+        UPDATE chat_his SET status=#{status} WHERE sender=#{receiver} AND receiver = #{sender};
     </update>
     <select id="isInChatList" parameterType="com.example.crossafter.chat.bean.ChatList" resultType="int">
         SELECT count(uid) FROM chatlist WHERE uid=#{uid} AND receiver=#{receiver}
     </select>
     <select id="getMsgid" parameterType="com.example.crossafter.chat.bean.ChatMessage" resultType="int">
-        SELECT msgid FROM chat_his WHERE sendtime=#{sendtime} ORDER BY msgid DESC limit 1;
+        SELECT msgid FROM chat_his WHERE sendtime=#{sendtime} AND sender=#{sender} ORDER BY msgid DESC limit 1;
     </select>
     <insert id="addChatList" parameterType="com.example.crossafter.chat.bean.ChatList">
-        insert into chatlist (uid,receiver,lastmsg,status,msg) values (#{uid},#{receiver},#{lastmsg},#{status},#{msg});
+        insert into chatlist (uid,receiver,lastmsg,status,msg,rname) values (#{uid},#{receiver},#{lastmsg},#{status},#{msg},#{rname});
     </insert>
     <update id="updateChatList" parameterType="com.example.crossafter.chat.bean.ChatList">
         UPDATE chatlist SET status=#{status},lastmsg=#{lastmsg},msg=#{msg} WHERE uid=#{uid} AND receiver=#{receiver};
@@ -26,6 +26,6 @@
         SELECT * FROM chatlist WHERE uid=#{uid};
     </select>
     <select id="getChatMsg" parameterType="com.example.crossafter.chat.bean.ChatMessage" resultType="com.example.crossafter.chat.bean.ChatMessage">
-        SELECT * FROM chat_his WHERE sender=#{sender} AND receiver=#{receiver};
+        SELECT * FROM chat_his WHERE (sender=#{sender} AND receiver=#{receiver}) or (sender=#{receiver} AND receiver=#{sender});
     </select>
 </mapper>

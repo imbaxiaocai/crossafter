@@ -6,6 +6,7 @@ import com.example.crossafter.chat.dao.ChatMapper;
 import com.example.crossafter.chat.service.ChatService;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.dao.UserMapper;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ import java.util.Random;
 public class ChatServiceImpl implements ChatService {
     @Autowired
     private ChatMapper chatMapper;
+    @Autowired
+    private UserMapper userMapper;
     public RespEntity translate(String message){
         RespEntity respEntity = new RespEntity();
         try {
@@ -70,6 +73,9 @@ public class ChatServiceImpl implements ChatService {
         RespEntity respEntity = new RespEntity();
         try {
             List<ChatList> chatLists = chatMapper.getChatList(uid);
+            for(int i=0;i<chatLists.size();i++){
+                chatLists.get(i).setRavater(userMapper.getAvatarById(chatLists.get(i).getReceiver()));
+            }
             respEntity.setData(chatLists);
             respEntity.setHead(RespHead.SUCCESS);
         }

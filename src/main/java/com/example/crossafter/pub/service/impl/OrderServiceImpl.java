@@ -44,6 +44,7 @@ public class OrderServiceImpl implements OrderService{
                 order.setRid(rid);
                 order.setUname(userMapper.getUnameById(rid));
                 order.setGname(good.getGname());
+                order.setGimg(good.getGimg());
                 //零售商扣钱
                 double sum = 0;
                 double wallet =userMapper.getWallet(order.getUname());

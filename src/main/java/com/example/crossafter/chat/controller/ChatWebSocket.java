@@ -5,6 +5,7 @@ import com.example.crossafter.chat.bean.ChatList;
 import com.example.crossafter.chat.bean.ChatMessage;
 import com.example.crossafter.chat.bean.ChatUser;
 import com.example.crossafter.chat.dao.ChatMapper;
+import com.example.crossafter.pub.dao.UserMapper;
 import net.sf.json.JSONObject;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -30,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ChatWebSocket{
 
     public static ChatMapper chatMapper;
+    public static UserMapper userMapper;
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
@@ -86,15 +88,17 @@ public class ChatWebSocket{
             msg.setSender(id);
             msg.setReceiver(to);
             msg.setContent(message);
+            msg.setRname(userMapper.getUnameById(to));
             //日期获取
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
             Date date = new Date();
             String now = sdf.format(date);
             msg.setSendtime(now);
-
+            sender.setRname(userMapper.getUnameById(to));
             sender.setUid(id);
             sender.setReceiver(to);
             sender.setMsg(message);
+            receiver.setRname(userMapper.getUnameById(id));
             receiver.setUid(to);
             receiver.setReceiver(id);
             receiver.setMsg(message);

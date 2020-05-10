@@ -10,6 +10,7 @@ public class PreOrder {
     private int amount;
     private double ssprice;
     private String gname;
+    private String gimg;//商品图片
 
     public int getPoid() {
         return poid;
@@ -81,5 +82,13 @@ public class PreOrder {
 
     public void setGname(String gname) {
         this.gname = gname;
+    }
+
+    public String getGimg() {
+        return gimg;
+    }
+
+    public void setGimg(String gimg) {
+        this.gimg = gimg;
     }
 }

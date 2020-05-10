@@ -6,6 +6,8 @@ public class ChatList {
     private int lastmsg;//最后一次消息id
     private int status;//是否有未读消息0-否1-是
     private String msg;//最后一条消息
+    private String rname;//聊天对象用户名
+    private String ravater;
 
     public int getUid() {
         return uid;
@@ -45,5 +47,21 @@ public class ChatList {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getRname() {
+        return rname;
+    }
+
+    public void setRname(String rname) {
+        this.rname = rname;
+    }
+
+    public String getRavater() {
+        return ravater;
+    }
+
+    public void setRavater(String ravater) {
+        this.ravater = ravater;
     }
 }
