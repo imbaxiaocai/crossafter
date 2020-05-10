@@ -74,7 +74,7 @@ public class ChatServiceImpl implements ChatService {
         try {
             List<ChatList> chatLists = chatMapper.getChatList(uid);
             for(int i=0;i<chatLists.size();i++){
-                chatLists.get(i).setRavater(userMapper.getAvatarById(chatLists.get(i).getReceiver()));
+                chatLists.get(i).setRavatar(userMapper.getAvatarById(chatLists.get(i).getReceiver()));
             }
             respEntity.setData(chatLists);
             respEntity.setHead(RespHead.SUCCESS);
