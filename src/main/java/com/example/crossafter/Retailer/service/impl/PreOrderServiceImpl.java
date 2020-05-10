@@ -60,10 +60,12 @@ public class PreOrderServiceImpl implements PreOrderService {
                 int duration = goodMapper.getDuration(preOrders.get(j).getGid());
                 String gname = goodMapper.getGname(preOrders.get(j).getGid());
                 String gimg = goodMapper.getGoodById(preOrders.get(j).getGid()).getGimg();
+                String rname = userMapper.getUnameById(preOrders.get(j).getRid());
                 preOrders.get(j).setSsprice(sprice);
                 preOrders.get(j).setDuration(duration);
                 preOrders.get(j).setGname(gname);
                 preOrders.get(j).setGimg(gimg);
+                preOrders.get(j).setRname(rname);
                 sum = sum + sprice;
             }
             //暂扣保证金

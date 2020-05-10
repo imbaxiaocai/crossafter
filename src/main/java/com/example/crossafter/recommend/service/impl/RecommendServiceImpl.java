@@ -65,7 +65,6 @@ public class RecommendServiceImpl implements RecommendService{
 			recommend = Utils.getRecom(recommend, item_temp, temp, reCounts * 0.2);
 			recommend = Utils.getRecom(recommend, user_temp, temp, reCounts * 0.2);
 			for (Integer integer : temp) {
-				
 				if (!recommend.contains(integer) && recommend.size() < reCounts) {
 					recommend.add(integer);
 				}
