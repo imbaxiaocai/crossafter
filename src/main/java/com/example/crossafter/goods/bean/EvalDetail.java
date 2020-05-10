@@ -1,13 +1,23 @@
 package com.example.crossafter.goods.bean;
 
 public class EvalDetail {
-    private int oid;//订单号
-    private int gid;//商品id
-    private int uid;//零售商id
-    private String content;//评价内容
-    private double evaluation;//评分
-    private String uname;//零售商名
+    private int oid;			//订单号
+    private int gid;			//商品id
+    private int uid;			//零售商id
+    private String content;		//评价内容
+    private double evaluation;	//评分
+    private String uname;		//零售商名
 
+//    public EvalDetail() {
+//		// TODO Auto-generated constructor stub
+//    	oid = -1;
+//    	gid = -1;
+//    	uid = -1;
+//    	content = null;
+//    	evaluation = (Double) null;
+//    	uname = null;
+//	}
+    
     public int getOid() {
         return oid;
     }
