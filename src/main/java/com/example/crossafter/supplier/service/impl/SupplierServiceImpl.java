@@ -89,7 +89,6 @@ public class SupplierServiceImpl implements SupplierService{
             //处理保证金和交易状态
             if (preOrder.getStatus()==1){
                 int amount= goodMapper.getAmount(preOrder.getGid());
-                if(amount>=preOrder.getAmount()) {
                     RetailerInventory retailerInventory = new RetailerInventory();
                     retailerInventory.setStatus(0);
                     retailerInventory.setDuration(preOrder.getDuration());
@@ -111,7 +110,6 @@ public class SupplierServiceImpl implements SupplierService{
                     cal.setTime(sdf.parse(begin));
                     cal.add(Calendar.DAY_OF_YEAR, preOrder.getDuration());
                     retailerInventory.setEnd_date(sdf.format(cal.getTime()));
-                    goodMapper.setAmount(amount-preOrder.getAmount());
                     //厂商加钱
                     swallet = swallet + sum;
                     User supplier = new User();
@@ -119,13 +117,15 @@ public class SupplierServiceImpl implements SupplierService{
                     supplier.setWallet(swallet);
                     userMapper.setWallet(supplier);
                     retailerInventoryMapper.addInventory(retailerInventory);
-                }
-                else {
-                    respEntity.setHead(RespHead.REQ_ERROR);
-                    return respEntity;
-                }
             }
             else if(preOrder.getStatus()==2){
+                //库存返还
+                int gid = preOrder.getGid();
+                Good good = new Good();
+                good.setGid(gid);
+                int amount = goodMapper.getAmount(gid);
+                good.setAmount(amount+preOrder.getAmount());
+                goodMapper.setAmount(good);
                 //零售商加钱
                 rwallet = rwallet + sum;
                 User retailer = new User();

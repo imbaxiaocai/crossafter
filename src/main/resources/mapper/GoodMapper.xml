@@ -16,7 +16,7 @@
     <select id="getAmount" parameterType="int" resultType="int">
         SELECT amount FROM goods WHERE gid=#{gid}
     </select>
-    <update id="setAmount" parameterType="int">
+    <update id="setAmount" parameterType="com.example.crossafter.goods.bean.Good">
         UPDATE goods SET amount=#{amount} WHERE gid=#{gid};
     </update>
     <select id="getGname" parameterType="int" resultType="String">
