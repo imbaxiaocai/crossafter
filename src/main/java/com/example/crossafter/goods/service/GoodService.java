@@ -9,4 +9,5 @@ public interface GoodService {
     RespEntity getAllGoods();
     RespEntity getGoodDetail(int gid);
     RespEntity searchGoods(String gname);
+    RespEntity removeGood(int gid);
 }

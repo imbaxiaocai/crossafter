@@ -15,6 +15,7 @@ public class Good{
     private int amount;
     private int content;
     private String description;
+    private int status;//上架状态
 
     public int getGid() {
         return gid;
@@ -109,5 +110,13 @@ public class Good{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
