@@ -41,6 +41,6 @@
         update goods SET status = 1 WHERE  gid=#{gid}
     </update>
     <select id="getTop5" parameterType="int" resultType="com.example.crossafter.goods.bean.Good">
-        SELECT * FROM goods WHERE fid=#{fid} ORDER BY gsales limit 5
+        SELECT * FROM goods WHERE fid=#{fid} ORDER BY gsales DESC limit 5
     </select>
 </mapper>
