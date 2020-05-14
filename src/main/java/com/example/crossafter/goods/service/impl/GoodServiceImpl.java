@@ -71,4 +71,19 @@ public class GoodServiceImpl implements GoodService{
         }
         return  respEntity;
     }
+    //获取排名前5
+    public RespEntity getTop5(int fid){
+        RespEntity respEntity = new RespEntity();
+        try{
+            List<Good> goods = goodMapper.getTop5(fid);
+            respEntity.setData(goods);
+            respEntity.setHead(RespHead.SUCCESS);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            respEntity.setHead(RespHead.SYS_ERROE);
+            return  respEntity;
+        }
+        return  respEntity;
+    }
 }

@@ -24,4 +24,5 @@ public interface GoodMapper {
     List<Good> getGoodsByFid(int fid);
     int setSales(Good good);
     int removeGood(int gid);
+    List<Good> getTop5(int fid);
 }
