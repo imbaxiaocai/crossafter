@@ -6,7 +6,7 @@ import com.example.crossafter.pub.bean.RespEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public interface ChatService {
-    RespEntity translate(String message);
+    RespEntity translate(String message,String lang);
     RespEntity getChatLists(int uid);
     RespEntity getMsgLists(ChatMessage chatMessage);
 }

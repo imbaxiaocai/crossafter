@@ -30,7 +30,7 @@ public class ChatController {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"message")){
-            respEntity = chatService.translate(jsonObject.getString("message"));
+            respEntity = chatService.translate(jsonObject.getString("message"),jsonObject.getString("lang"));
         }
         else{
             respEntity.setHead(RespHead.REQ_ERROR);
