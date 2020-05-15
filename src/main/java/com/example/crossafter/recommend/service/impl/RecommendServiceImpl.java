@@ -89,7 +89,10 @@ public class RecommendServiceImpl implements RecommendService{
     	//20200515修改返回的信息
 		List<Good> results = new ArrayList<Good>();
 		for(int i=0;i<recommend.size();i++){
-			results.add(goodMapper.getGoodById(recommend.get(i)));
+		    Good good = goodMapper.getGoodById(recommend.get(i));
+		    if(good.getStatus()==0) {
+                results.add(good);
+            }
 		}
     	//推荐结果写入
     	respEntity.setData(results);
