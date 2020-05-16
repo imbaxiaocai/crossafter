@@ -5,6 +5,7 @@ import com.example.crossafter.Retailer.bean.Trolley;
 import com.example.crossafter.Retailer.dao.PreOrderMapper;
 import com.example.crossafter.Retailer.dao.TrolleyMapper;
 import com.example.crossafter.Retailer.service.PreOrderService;
+import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
@@ -41,7 +42,10 @@ public class PreOrderServiceImpl implements PreOrderService {
                     lack.add(preOrders.get(k).getGid());
                 }
                 if(lack.size()==0) {
-                    goodMapper.setAmount(amount - preOrders.get(k).getAmount());
+                    Good good = new Good();
+                    good.setGid(preOrders.get(k).getGid());
+                    good.setAmount(amount - preOrders.get(k).getAmount());
+                    goodMapper.setAmount(good);
                     Trolley trolley = new Trolley();
                     trolley.setGid(preOrders.get(k).getGid());
                     trolley.setUid(preOrders.get(k).getRid());
@@ -60,10 +64,12 @@ public class PreOrderServiceImpl implements PreOrderService {
                 int duration = goodMapper.getDuration(preOrders.get(j).getGid());
                 String gname = goodMapper.getGname(preOrders.get(j).getGid());
                 String gimg = goodMapper.getGoodById(preOrders.get(j).getGid()).getGimg();
+                String rname = userMapper.getUnameById(preOrders.get(j).getRid());
                 preOrders.get(j).setSsprice(sprice);
                 preOrders.get(j).setDuration(duration);
                 preOrders.get(j).setGname(gname);
                 preOrders.get(j).setGimg(gimg);
+                preOrders.get(j).setRname(rname);
                 sum = sum + sprice;
             }
             //暂扣保证金

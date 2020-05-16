@@ -17,10 +17,12 @@ public interface GoodMapper {
     int getDuration(int gid);
     int addGood(Good good);
     int getAmount(int gid);
-    int setAmount(int gid);
+    int setAmount(Good good);
     String getGname(int gid);
     double getGprice(int gid);
     List<Good> searchGoods(String gname);
     List<Good> getGoodsByFid(int fid);
     int setSales(Good good);
+    int removeGood(int gid);
+    List<Good> getTop5(int fid);
 }

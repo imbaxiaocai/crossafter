@@ -52,8 +52,8 @@ public class UserController {
         response.getWriter().close();
     }
     //设置头像
-    @RequestMapping("/setavater")
-    public void setAvater(HttpServletRequest request,HttpServletResponse response) throws IOException{
+    @RequestMapping("/setavatar")
+    public void setAvatar(HttpServletRequest request,HttpServletResponse response) throws IOException{
         RespEntity respEntity = new RespEntity();
         //token验证
         if(request.getParameter("key")!=null&&request.getParameter("value")!=null){
@@ -62,7 +62,7 @@ public class UserController {
             if(sysval!=""&&sysval!=null&&sysval.equals(request.getParameter("value"))){
                 User user = new User();
                 user.setUid(Integer.parseInt(request.getParameter("uid")));
-                respEntity = userService.setAvater(request,user);
+                respEntity = userService.setAvatar(request,user);
             }
             else{
                 respEntity.setHead(RespHead.TOKEN_ERROR);

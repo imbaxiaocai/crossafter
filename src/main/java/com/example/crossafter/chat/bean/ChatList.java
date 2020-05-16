@@ -7,7 +7,7 @@ public class ChatList {
     private int status;//是否有未读消息0-否1-是
     private String msg;//最后一条消息
     private String rname;//聊天对象用户名
-    private String ravater;
+    private String ravatar;
 
     public int getUid() {
         return uid;
@@ -57,11 +57,11 @@ public class ChatList {
         this.rname = rname;
     }
 
-    public String getRavater() {
-        return ravater;
+    public String getRavatar() {
+        return ravatar;
     }
 
-    public void setRavater(String ravater) {
-        this.ravater = ravater;
+    public void setRavatar(String ravatar) {
+        this.ravatar = ravatar;
     }
 }

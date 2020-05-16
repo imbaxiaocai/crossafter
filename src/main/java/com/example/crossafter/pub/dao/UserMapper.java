@@ -16,6 +16,6 @@ public interface UserMapper {
     String getUnameById(int uid);
     int getUidByUname(String uname);
     String getAvatarById(int uid);
-    int setAvater(User user);
+    int setAvatar(User user);
     User getUserInfo(int uid);
 }

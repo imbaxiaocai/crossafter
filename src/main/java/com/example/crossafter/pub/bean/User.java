@@ -10,7 +10,7 @@ public class User{
     private String location;
     private double wallet;
     private int usertype; //0-零售商 1-供应商
-    private String Avatar;
+    private String avatar;
     public int getUid() {
         return uid;
     }
@@ -75,11 +75,11 @@ public class User{
     }
 
     public String getAvatar() {
-        return Avatar;
+        return avatar;
     }
 
     public void setAvatar(String avatar) {
-        Avatar = avatar;
+        this.avatar = avatar;
     }
     @Override
     public boolean equals(Object obj){

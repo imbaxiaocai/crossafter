@@ -83,21 +83,21 @@ public class UserServiceImpl implements UserService{
         }
         return respEntity;
     }
-    public RespEntity setAvater(HttpServletRequest request,User user){
+    public RespEntity setAvatar(HttpServletRequest request,User user){
         RespEntity respEntity = new RespEntity();
         try {
             MultipartHttpServletRequest req =(MultipartHttpServletRequest)request;
-            MultipartFile multipartFile =  req.getFile("avater");
+            MultipartFile multipartFile =  req.getFile("avatar");
             Random r = new Random();
             String t = "" + (r.nextInt(9000)+1000) + user.getUname();
             String filename = DigestUtils.md5DigestAsHex(t.getBytes());
-            String realpath = "http://123.206.128.233:8080/waibaoimg/avater";
+            String realpath = "http://123.206.128.233:8080/waibaoimg/avatar";
             user.setAvatar(realpath+"/"+filename);
-            String filepath = "/usr/www/waibaoimg/avater";
+            String filepath = "/usr/www/waibaoimg/avatar";
             File img = new File(filepath,filename);
             multipartFile.transferTo(img);
             //设置头像
-            userMapper.setAvater(user);
+            userMapper.setAvatar(user);
             respEntity.setHead(RespHead.SUCCESS);
         }
         catch (Exception e){

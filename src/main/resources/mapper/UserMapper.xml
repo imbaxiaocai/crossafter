@@ -22,10 +22,10 @@
     <select id="getAvatarById" parameterType="int" resultType="String">
         SELECT avatar FROM `user` WHERE uid=#{uid};
     </select>
-    <update id="setAvater" parameterType="com.example.crossafter.pub.bean.User">
-        update `user` SET avater=#{avater} WHERE uid=#{uid};
+    <update id="setAvatar" parameterType="com.example.crossafter.pub.bean.User">
+        update `user` SET avatar=#{avatar} WHERE uid=#{uid};
     </update>
     <select id="getUserInfo" parameterType="int" resultType="com.example.crossafter.pub.bean.User">
-        SELECT uid,uname,rname,phonenumber,location,wallet,avater from `user` WHERE uid=#{uid}
+        SELECT uid,uname,rname,phonenumber,location,wallet,avatar from `user` WHERE uid=#{uid}
     </select>
 </mapper>

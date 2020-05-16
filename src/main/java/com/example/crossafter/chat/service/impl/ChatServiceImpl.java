@@ -31,7 +31,7 @@ public class ChatServiceImpl implements ChatService {
     private ChatMapper chatMapper;
     @Autowired
     private UserMapper userMapper;
-    public RespEntity translate(String message){
+    public RespEntity translate(String message,String lang){
         RespEntity respEntity = new RespEntity();
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -42,7 +42,7 @@ public class ChatServiceImpl implements ChatService {
             MultiValueMap<String,String> map = new LinkedMultiValueMap<String, String>();
             map.add("q",message);
             map.add("from","auto");
-            map.add("to","zh");
+            map.add("to",lang);
             map.add("appid","20200413000418451");
             //生成4为随机数
             Random r = new Random();
@@ -74,7 +74,7 @@ public class ChatServiceImpl implements ChatService {
         try {
             List<ChatList> chatLists = chatMapper.getChatList(uid);
             for(int i=0;i<chatLists.size();i++){
-                chatLists.get(i).setRavater(userMapper.getAvatarById(chatLists.get(i).getReceiver()));
+                chatLists.get(i).setRavatar(userMapper.getAvatarById(chatLists.get(i).getReceiver()));
             }
             respEntity.setData(chatLists);
             respEntity.setHead(RespHead.SUCCESS);

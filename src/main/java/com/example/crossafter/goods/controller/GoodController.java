@@ -64,4 +64,34 @@ public class GoodController {
         response.getWriter().write(mapper.writeValueAsString(respEntity));
         response.getWriter().close();
     }
+    //下架商品
+    @RequestMapping("/removegood")
+    public void ckt_removeGood(@RequestBody Object obj, HttpServletResponse response)throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"gid")){
+            respEntity = goodService.removeGood(jsonObject.getInt("gid"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
+    //获取前5销量
+    @RequestMapping("/gettop5")
+    public void ckt_getTop5(@RequestBody Object obj, HttpServletResponse response)throws IOException{
+        RespEntity respEntity = new RespEntity();
+        JSONObject jsonObject = JSONObject.fromObject(obj);
+        if(checkJson.isEffective(jsonObject,"fid")){
+            respEntity = goodService.getTop5(jsonObject.getInt("fid"));
+        }
+        else {
+            respEntity.setHead(RespHead.REQ_ERROR);
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        response.getWriter().write(mapper.writeValueAsString(respEntity));
+        response.getWriter().close();
+    }
 }

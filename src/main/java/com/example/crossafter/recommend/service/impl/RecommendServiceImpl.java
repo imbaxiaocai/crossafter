@@ -2,6 +2,8 @@ package com.example.crossafter.recommend.service.impl;
 
 import com.example.crossafter.goods.bean.EvalDetail;
 import com.example.crossafter.goods.bean.Evaluation;
+import com.example.crossafter.goods.bean.Good;
+import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.recommend.dao.RecommendMapper;
@@ -10,18 +12,14 @@ import com.example.crossafter.recommend.util.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RecommendServiceImpl implements RecommendService{
     @Autowired
     RecommendMapper recommendMapper;
+    @Autowired
+	private GoodMapper goodMapper;
     //计算商品的权重
     @Override
     public RespEntity updateWR() {
@@ -58,14 +56,14 @@ public class RecommendServiceImpl implements RecommendService{
     	if (count <= 0) {	//新用户
     		recommend.addAll(recommendMapper.getTopEvaluation());
 		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户
-			List<Integer> item_temp = getP_itemBased(uid);
-			List<Integer> user_temp = getP_userBased(uid);
+			List<Integer> item_temp = getP_itemBased(uid).subList(0, reCounts/2);
+			List<Integer> user_temp = getP_userBased(uid).subList(0, reCounts/2);
+
 			List<Integer> temp = recommendMapper.getTopEvaluation();
 			
 			recommend = Utils.getRecom(recommend, item_temp, temp, reCounts * 0.2);
 			recommend = Utils.getRecom(recommend, user_temp, temp, reCounts * 0.2);
 			for (Integer integer : temp) {
-				
 				if (!recommend.contains(integer) && recommend.size() < reCounts) {
 					recommend.add(integer);
 				}
@@ -89,9 +87,16 @@ public class RecommendServiceImpl implements RecommendService{
     			return o2_weight - o1_weight;	//降序
     		}
 		});
-    	
+    	//20200515修改返回的信息
+		List<Good> results = new ArrayList<Good>();
+		for(int i=0;i<recommend.size();i++){
+		    Good good = goodMapper.getGoodById(recommend.get(i));
+		    if(good.getStatus()==0) {
+                results.add(good);
+            }
+		}
     	//推荐结果写入
-    	respEntity.setData(recommend);
+    	respEntity.setData(results);
     	respEntity.setHead(RespHead.SUCCESS);
 		return respEntity;
 	}
