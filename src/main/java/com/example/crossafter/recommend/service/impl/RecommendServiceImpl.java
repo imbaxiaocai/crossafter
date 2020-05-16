@@ -58,6 +58,7 @@ public class RecommendServiceImpl implements RecommendService{
 		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户
 			List<Integer> item_temp = getP_itemBased(uid).subList(0, reCounts/2);
 			List<Integer> user_temp = getP_userBased(uid).subList(0, reCounts/2);
+
 			List<Integer> temp = recommendMapper.getTopEvaluation();
 			
 			recommend = Utils.getRecom(recommend, item_temp, temp, reCounts * 0.2);
@@ -72,8 +73,8 @@ public class RecommendServiceImpl implements RecommendService{
 			List<Integer> item_temp = getP_itemBased(uid);
 			List<Integer> user_temp = getP_userBased(uid);
 			
-			recommend.addAll(item_temp.subList(0, (int) (reCounts * 0.5)));
-			recommend.addAll(user_temp.subList(0, (int) (reCounts * 0.5)));
+			recommend.addAll(item_temp.subList(0, reCounts / 2));
+			recommend.addAll(user_temp.subList(0, reCounts / 2));
 		}
     	
     	//对推荐结果按照权重排序
@@ -83,7 +84,7 @@ public class RecommendServiceImpl implements RecommendService{
     			// TODO Auto-generated method stub
     			int o1_weight = recommendMapper.getweightByGid(o1);
     			int o2_weight = recommendMapper.getweightByGid(o2);
-    			return o2_weight - o1_weight;
+    			return o2_weight - o1_weight;	//降序
     		}
 		});
     	//20200515修改返回的信息
