@@ -56,8 +56,8 @@ public class RecommendServiceImpl implements RecommendService{
     	if (count <= 0) {	//新用户
     		recommend.addAll(recommendMapper.getTopEvaluation());
 		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户
-			List<Integer> item_temp = getP_itemBased(uid).subList(0, reCounts/2);
-			List<Integer> user_temp = getP_userBased(uid).subList(0, reCounts/2);
+			List<Integer> item_temp = getP_itemBased(uid);
+			List<Integer> user_temp = getP_userBased(uid);
 
 			List<Integer> temp = recommendMapper.getTopEvaluation();
 			

@@ -32,7 +32,7 @@
     </select>
 
     <select id="getTopEvaluation" resultType="int">
-    	select  gid from evaluation order by weight desc limit 50;
+    	select gid from evaluation where weight >= 0 order by weight desc limit 50;
     </select>
     
     <select id="getCountByUid" resultType="int">
