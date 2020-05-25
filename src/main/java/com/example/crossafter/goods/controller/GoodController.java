@@ -40,7 +40,7 @@ public class GoodController {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"gid")){
-            respEntity = goodService.getGoodDetail(jsonObject.getInt("gid"));
+            respEntity = goodService.getGoodDetail(jsonObject.getInt("uid"),jsonObject.getInt("gid"));
         }
         else {
             respEntity.setHead(RespHead.REQ_ERROR);

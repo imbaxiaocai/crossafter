@@ -10,6 +10,8 @@ import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
 import com.example.crossafter.pub.bean.User;
+import com.example.crossafter.pub.bean.UserBehavior;
+import com.example.crossafter.pub.dao.UserBehaviorMapper;
 import com.example.crossafter.pub.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class PreOrderServiceImpl implements PreOrderService {
     private GoodMapper goodMapper;
     @Autowired
     private TrolleyMapper trolleyMapper;
+    @Autowired
+    private UserBehaviorMapper userBehaviorMapper;
     public RespEntity addPreOrder(ArrayList<PreOrder> preOrders,String uname){
         RespEntity respEntity = new RespEntity();
         try {
@@ -87,6 +91,19 @@ public class PreOrderServiceImpl implements PreOrderService {
             //添加预订单
             for (int i=0;i<preOrders.size();i++){
                 preOrderMapper.addPreOrder(preOrders.get(i));
+            }
+            for(int m=0;m<preOrders.size();m++){
+                //用户行为
+                UserBehavior userBehavior =new UserBehavior();
+                userBehavior.setGid(preOrders.get(m).getGid());
+                userBehavior.setUid(preOrders.get(m).getRid());
+                userBehavior.setScore(3);
+                if(userBehaviorMapper.getByUidGid(userBehavior)==null){
+                    userBehaviorMapper.addBehavior(userBehavior);
+                }
+                else {
+                    userBehaviorMapper.updateBehavior(userBehavior);
+                }
             }
             respEntity.setHead(RespHead.SUCCESS);
         }

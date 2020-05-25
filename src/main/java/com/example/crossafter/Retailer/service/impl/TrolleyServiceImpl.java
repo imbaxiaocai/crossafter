@@ -7,6 +7,8 @@ import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.bean.UserBehavior;
+import com.example.crossafter.pub.dao.UserBehaviorMapper;
 import com.example.crossafter.pub.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class TrolleyServiceImpl implements TrolleyService{
     private GoodMapper goodMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserBehaviorMapper userBehaviorMapper;
     public RespEntity addToTrolley(Trolley trolley){
         //前端包含 uid gid amount默认为1
         RespEntity respEntity = new RespEntity();
@@ -42,6 +46,17 @@ public class TrolleyServiceImpl implements TrolleyService{
                 trolley.setFid(good.getFid());
                 System.out.println(trolley.getGname());
                 trolleyMapper.addToTrolley(trolley);
+                //用户行为
+                UserBehavior userBehavior =new UserBehavior();
+                userBehavior.setGid(trolley.getGid());
+                userBehavior.setUid(trolley.getUid());
+                userBehavior.setScore(2);
+                if(userBehaviorMapper.getByUidGid(userBehavior)==null){
+                    userBehaviorMapper.addBehavior(userBehavior);
+                }
+                else {
+                    userBehaviorMapper.updateBehavior(userBehavior);
+                }
             }
             respEntity.setHead(RespHead.SUCCESS);
             return respEntity;

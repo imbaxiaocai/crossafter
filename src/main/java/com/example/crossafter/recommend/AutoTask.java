@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class AutoTask {
     @Autowired
     RecommendService recommendService;
-    @Scheduled(cron = "0 40 0 * * ?")
+    @Scheduled(cron = "40 01 13 * * ?")
     private void updateWR(){
         recommendService.updateWR();
     }
