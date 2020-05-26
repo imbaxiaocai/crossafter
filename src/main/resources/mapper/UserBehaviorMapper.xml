@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.crossafter.pub.dao.UserBehaviorMapper">
+    <select id="getByUidGid" parameterType="com.example.crossafter.pub.bean.UserBehavior" resultType="com.example.crossafter.pub.bean.UserBehavior">
+        SELECT * FROM userbehavior WHERE uid=#{uid} AND gid=#{gid};
+    </select>
+    <insert id="addBehavior" parameterType="com.example.crossafter.pub.bean.UserBehavior">
+        insert into userbehavior (uid,gid,score) values (#{uid},#{gid},#{score});
+    </insert>
+    <update id="updateBehavior" parameterType="com.example.crossafter.pub.bean.UserBehavior">
+        UPDATE userbehavior SET score = score+#{score} WHERE uid=#{uid} AND gid=#{gid};
+    </update>
+</mapper>
