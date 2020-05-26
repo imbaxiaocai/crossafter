@@ -42,4 +42,8 @@
     <select id="getweightByGid" resultType="int">
     	select weight from evaluation where gid=${gid};
     </select>
+    
+    <select id="getEvaluation" resultType="int">
+    	select evaluation from evaldetail where gid=${gid} and uid=${uid};
+    </select>
 </mapper>

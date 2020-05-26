@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.example.crossafter.goods.bean.EvalDetail;
+import com.example.crossafter.pub.bean.UserBehavior;
 
 public class Utils {
 	public static final int MIN_SCORE = 10;			//进入榜单需要的最少评价人数
@@ -118,5 +119,46 @@ public class Utils {
 			}
 		}
 		return re;
+	}
+	
+	//整合用户对商品行为分数的数据集
+	public static Map<Integer, Double> getUserGoodMap(List<EvalDetail> eList, List<UserBehavior> uList){
+		Map<Integer, Double> res = new HashMap<>();
+		for (UserBehavior u : uList) {
+			res.put(u.getGid(), Double.valueOf(u.getScore()));
+		}
+		for (EvalDetail e : eList) {
+			if (res.containsKey(e.getGid())) {
+				double oldScore = res.get(e.getGid());
+				if (e.getEvaluation() >= LIKE_EVALUATION) {
+					res.put(e.getGid(), oldScore + e.getEvaluation());
+				}else {
+					res.put(e.getGid(), oldScore - e.getEvaluation());
+				}
+			}else {
+				res.put(e.getGid(), e.getEvaluation());
+			}
+		}
+		return res;
+	}
+	
+	public static Map<Integer, Double> getGoodUserMap(List<EvalDetail> eList, List<UserBehavior> uList){
+		Map<Integer, Double> res = new HashMap<>();
+		for (UserBehavior u : uList) {
+			res.put(u.getUid(), Double.valueOf(u.getScore()));
+		}
+		for (EvalDetail e : eList) {
+			if (res.containsKey(e.getUid())) {
+				double oldScore = res.get(e.getUid());
+				if (e.getEvaluation() >= LIKE_EVALUATION) {
+					res.put(e.getUid(), oldScore + e.getEvaluation());
+				}else {
+					res.put(e.getUid(), oldScore - e.getEvaluation());
+				}
+			}else {
+				res.put(e.getUid(), e.getEvaluation());
+			}
+		}
+		return res;
 	}
 }

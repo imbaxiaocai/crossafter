@@ -6,6 +6,8 @@ import com.example.crossafter.goods.bean.Good;
 import com.example.crossafter.goods.dao.GoodMapper;
 import com.example.crossafter.pub.bean.RespEntity;
 import com.example.crossafter.pub.bean.RespHead;
+import com.example.crossafter.pub.bean.UserBehavior;
+import com.example.crossafter.pub.dao.UserBehaviorMapper;
 import com.example.crossafter.recommend.dao.RecommendMapper;
 import com.example.crossafter.recommend.service.RecommendService;
 import com.example.crossafter.recommend.util.Utils;
@@ -20,6 +22,9 @@ public class RecommendServiceImpl implements RecommendService{
     RecommendMapper recommendMapper;
     @Autowired
 	private GoodMapper goodMapper;
+    @Autowired
+    private UserBehaviorMapper userBehaviorMapper;
+    
     //计算商品的权重
     @Override
     public RespEntity updateWR() {
@@ -107,20 +112,24 @@ public class RecommendServiceImpl implements RecommendService{
      * @return Map<Integer, Double> key为用户id value为用户之间的相似值
      */
     private Map<Integer, Double> getSim(int uid){
-//    	Utils utils = new Utils();
     	Map<Integer, Double> simUid = new LinkedHashMap<>();	//最终结果数据集
-    	List<EvalDetail> list = recommendMapper.getAllEvaluationByUid(uid);
-    	Map<Integer, Double> X = Utils.getGoodData(list);
+    	List<EvalDetail> evalList = recommendMapper.getAllEvaluationByUid(uid);
+    	List<UserBehavior> behList = userBehaviorMapper.getScoreByUid(uid);
+    	
+    	//计算用户对商品数据集    	
+    	Map<Integer, Double> X = Utils.getUserGoodMap(evalList, behList);
+    	
     	//筛选相似用户
     	Set<Integer> uidSet = new HashSet<>();
-    	for (EvalDetail e : list) {
+    	for (EvalDetail e : evalList) {
 			List<Integer> uidlist = recommendMapper.getUidByGid(e.getGid());
 			uidSet.addAll(uidlist);
 		}
     	//计算相似用户的相似度并选出前10位相似用户
     	for (Integer u : uidSet) {
 			List<EvalDetail> uList = recommendMapper.getAllEvaluationByUid(u);
-			Map<Integer, Double> Y = Utils.getGoodData(uList);
+			List<UserBehavior> bList = userBehaviorMapper.getScoreByUid(uid);
+			Map<Integer, Double> Y = Utils.getUserGoodMap(uList, bList);
 			double sim = Utils.getSim(X, Y);
 			
 			if (simUid.size() < Utils.MAX_USER_COUNT) {
@@ -169,11 +178,16 @@ public class RecommendServiceImpl implements RecommendService{
     	
     	Set<Integer> candidate = getCandidate_userBased(uid);
     	Map<Integer, Double> simUser = getSim(uid);
+    	
     	for (Integer i : candidate) {
-			List<EvalDetail> list = recommendMapper.getAllEvaluationByGid(i);
+			List<EvalDetail> evalList = recommendMapper.getAllEvaluationByGid(i);
+			List<UserBehavior> uList = userBehaviorMapper.getScoreByGid(i);
+			
+			Map<Integer, Double> map = Utils.getGoodUserMap(evalList, uList);
+			
 			double p = 0;
-			for (EvalDetail e : list) {
-				p += e.getEvaluation() * simUser.get(e.getUid());
+			for (Integer u : map.keySet()) {
+				p += map.get(u) * simUser.get(u);
 			}
 			
 			int j = 0;
@@ -198,7 +212,7 @@ public class RecommendServiceImpl implements RecommendService{
     private Map<Integer, Double> getW(int gid){
     	Map<Integer, Double> result = new LinkedHashMap<>();
     	
-    	//寻找购买统一商品的用户
+    	//寻找购买同一商品的用户
     	List<Integer> userList = recommendMapper.getUidByGid(gid);
     	//筛选商品
     	Set<Integer> gids = new HashSet<>();
@@ -216,7 +230,8 @@ public class RecommendServiceImpl implements RecommendService{
 			//同时喜欢两种商品的人数
 			int count = 0;
 			for (Integer integer : uList) {
-				if (userList.contains(integer)) {
+				if (userList.contains(integer) && 
+						recommendMapper.getEvaluation(i, integer).get(0) >= Utils.LIKE_EVALUATION) {
 					count ++;
 				}
 			}

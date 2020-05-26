@@ -33,4 +33,6 @@ public interface RecommendMapper {
     int getCountByUid(@Param("uid") int uid);
     
     int getweightByGid(@Param("gid") int gid);
+    
+    List<Integer> getEvaluation(@Param("gid") int gid, @Param("uid") int uid);
 }

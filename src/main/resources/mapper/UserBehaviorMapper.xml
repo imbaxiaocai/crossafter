@@ -10,4 +10,11 @@
     <update id="updateBehavior" parameterType="com.example.crossafter.pub.bean.UserBehavior">
         UPDATE userbehavior SET score = score+#{score} WHERE uid=#{uid} AND gid=#{gid};
     </update>
+	
+	<select id="getScoreByUid" resultType="com.example.crossafter.pub.bean.UserBehavior">
+		select gid, score FROM userbehavior where uid=${uid};
+	</select>
+	<select id="getScoreByGid" resultType="com.example.crossafter.pub.bean.UserBehavior">
+		select uid, score FROM userbehavior where gid=${gid};
+	</select>
 </mapper>
