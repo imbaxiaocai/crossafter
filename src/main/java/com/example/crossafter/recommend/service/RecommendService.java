@@ -14,5 +14,5 @@ public interface RecommendService {
      * @retrun RespEntity
      */
     
-    RespEntity updateRecommend(int uid, int reCounts);
+    RespEntity updateRecommend(int uid, int reCounts) throws Exception;
 }
