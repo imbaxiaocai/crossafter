@@ -12,9 +12,9 @@
     </update>
 	
 	<select id="getScoreByUid" resultType="com.example.crossafter.pub.bean.UserBehavior">
-		select gid, score WHERE userbehavior where uid=${uid};
+		select gid, score FROM userbehavior where uid=${uid};
 	</select>
 	<select id="getScoreByGid" resultType="com.example.crossafter.pub.bean.UserBehavior">
-		select uid, score WHERE userbehavior where gid=${gid};
+		select uid, score FROM userbehavior where gid=${gid};
 	</select>
 </mapper>
