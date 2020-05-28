@@ -187,7 +187,9 @@ public class RecommendServiceImpl implements RecommendService{
 			
 			double p = 0;
 			for (Integer u : map.keySet()) {
-				p += map.get(u) * simUser.get(u);
+				if(simUser.containsKey(u)) {
+					p += map.get(u) * simUser.get(u);
+				}
 			}
 			
 			int j = 0;
