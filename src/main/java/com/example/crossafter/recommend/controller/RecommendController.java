@@ -25,7 +25,7 @@ public class RecommendController {
     private CheckJson checkJson;
     //获取推荐商品
     @RequestMapping("/getgoods")
-    public void ckt_getRecommendGoods(@RequestBody Object obj, HttpServletResponse response) throws Exception {
+    public void ckt_getRecommendGoods(@RequestBody Object obj, HttpServletResponse response) throws IOException {
         RespEntity respEntity = new RespEntity();
         JSONObject jsonObject = JSONObject.fromObject(obj);
         if(checkJson.isEffective(jsonObject,"uid")&&checkJson.isEffective(jsonObject,"recounts")){

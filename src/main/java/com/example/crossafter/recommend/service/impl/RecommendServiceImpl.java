@@ -11,16 +11,10 @@ import com.example.crossafter.pub.dao.UserBehaviorMapper;
 import com.example.crossafter.recommend.dao.RecommendMapper;
 import com.example.crossafter.recommend.service.RecommendService;
 import com.example.crossafter.recommend.util.Utils;
-
-import org.apache.tomcat.jni.Pool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.rmi.server.UID;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Service
 public class RecommendServiceImpl implements RecommendService{
@@ -30,7 +24,7 @@ public class RecommendServiceImpl implements RecommendService{
 	private GoodMapper goodMapper;
     @Autowired
     private UserBehaviorMapper userBehaviorMapper;
-        
+    
     //计算商品的权重
     @Override
     public RespEntity updateWR() {
@@ -58,7 +52,7 @@ public class RecommendServiceImpl implements RecommendService{
     }
     
     @Override
-	public RespEntity updateRecommend(int uid, int reCounts) throws Exception {
+	public RespEntity updateRecommend(int uid, int reCounts) {
 		// TODO Auto-generated method stub
     	RespEntity respEntity = new RespEntity();
     	List<Integer> recommend = new LinkedList<>();
@@ -66,22 +60,14 @@ public class RecommendServiceImpl implements RecommendService{
     	int count = recommendMapper.getCountByUid(uid);
     	if (count <= 0) {	//新用户
     		recommend.addAll(recommendMapper.getTopEvaluation());
-		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户	
-			LocalThread_getPIB thread_item = new LocalThread_getPIB(uid);
-			LocalThread_getPUB thread_user = new LocalThread_getPUB(uid);
-			LocalThread_getTop thread_top = new LocalThread_getTop();
-			thread_item.start();
-			thread_user.start();
-			thread_top.start();
+		}else if (count <= Utils.MIN_SCORE) {	//数据稀疏性用户
+			List<Integer> item_temp = getP_itemBased(uid);
+			List<Integer> user_temp = getP_userBased(uid);
+
+			List<Integer> temp = recommendMapper.getTopEvaluation();
 			
-			thread_item.join();
-			thread_user.join();
-			thread_top.join();
-			
-			List<Integer> temp = thread_top.tops;
-			
-			recommend = Utils.getRecom(recommend, thread_item.items, temp, reCounts * 0.2);
-			recommend = Utils.getRecom(recommend, thread_user.users, temp, reCounts * 0.2);
+			recommend = Utils.getRecom(recommend, item_temp, temp, reCounts * 0.2);
+			recommend = Utils.getRecom(recommend, user_temp, temp, reCounts * 0.2);
 			for (Integer integer : temp) {
 				if (!recommend.contains(integer) && recommend.size() < reCounts) {
 					recommend.add(integer);
@@ -89,16 +75,11 @@ public class RecommendServiceImpl implements RecommendService{
 			}
 			
 		}else {		//非数据稀疏性用户
-			LocalThread_getPIB thread_item = new LocalThread_getPIB(uid);
-			LocalThread_getPUB thread_user = new LocalThread_getPUB(uid);
-			thread_item.start();
-			thread_user.start();
+			List<Integer> item_temp = getP_itemBased(uid);
+			List<Integer> user_temp = getP_userBased(uid);
 			
-			thread_item.join();
-			thread_user.join();
-			
-			recommend.addAll(thread_item.items.subList(0, reCounts / 2));
-			recommend.addAll(thread_user.users.subList(0, reCounts / 2));
+			recommend.addAll(item_temp.subList(0, reCounts / 2));
+			recommend.addAll(user_temp.subList(0, reCounts / 2));
 		}
     	
     	//对推荐结果按照权重排序
@@ -130,47 +111,25 @@ public class RecommendServiceImpl implements RecommendService{
      * @param int uid	用户编号
      * @return Map<Integer, Double> key为用户id value为用户之间的相似值
      */
-    private Map<Integer, Double> getSim(int uid) {
+    private Map<Integer, Double> getSim(int uid){
     	Map<Integer, Double> simUid = new LinkedHashMap<>();	//最终结果数据集
-    	
-    	LocalThread_getBeByUid thread_behaviors = new LocalThread_getBeByUid(uid);
-    	LocalThread_getEvaByUid thread_evals = new LocalThread_getEvaByUid(uid);
-    	thread_behaviors.start();
-    	thread_evals.start();
-    	
-    	try {
-			thread_behaviors.join();
-	    	thread_evals.join();
-		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+    	List<EvalDetail> evalList = recommendMapper.getAllEvaluationByUid(uid);
+    	List<UserBehavior> behList = userBehaviorMapper.getScoreByUid(uid);
     	
     	//计算用户对商品数据集    	
-    	Map<Integer, Double> X = Utils.getUserGoodMap(thread_evals.evalDetails, thread_behaviors.behaviors);
+    	Map<Integer, Double> X = Utils.getUserGoodMap(evalList, behList);
     	
     	//筛选相似用户
     	Set<Integer> uidSet = new HashSet<>();
-    	for (EvalDetail e : thread_evals.evalDetails) {
+    	for (EvalDetail e : evalList) {
 			List<Integer> uidlist = recommendMapper.getUidByGid(e.getGid());
 			uidSet.addAll(uidlist);
 		}
     	//计算相似用户的相似度并选出前10位相似用户
     	for (Integer u : uidSet) {
-    		LocalThread_getBeByUid thread_behaviors_Y = new LocalThread_getBeByUid(u);
-        	LocalThread_getEvaByUid thread_evals_Y = new LocalThread_getEvaByUid(u);
-        	thread_behaviors_Y.start();
-        	thread_evals_Y.start();
-        	
-        	try {
-            	thread_behaviors_Y.join();
-				thread_evals_Y.join();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-        	
-			Map<Integer, Double> Y = Utils.getUserGoodMap(thread_evals_Y.evalDetails, thread_behaviors_Y.behaviors);
+			List<EvalDetail> uList = recommendMapper.getAllEvaluationByUid(u);
+			List<UserBehavior> bList = userBehaviorMapper.getScoreByUid(uid);
+			Map<Integer, Double> Y = Utils.getUserGoodMap(uList, bList);
 			double sim = Utils.getSim(X, Y);
 			
 			if (simUid.size() < Utils.MAX_USER_COUNT) {
@@ -221,20 +180,10 @@ public class RecommendServiceImpl implements RecommendService{
     	Map<Integer, Double> simUser = getSim(uid);
     	
     	for (Integer i : candidate) {
-    		LocalThread_getBeByGid thread_be = new LocalThread_getBeByGid(i);
-    		LocalThread_getEvaByGid thread_eva = new LocalThread_getEvaByGid(i);
-    		thread_be.start();
-    		thread_eva.start();
-    		
-    		try {
-				thread_be.join();
-	    		thread_eva.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			List<EvalDetail> evalList = recommendMapper.getAllEvaluationByGid(i);
+			List<UserBehavior> uList = userBehaviorMapper.getScoreByGid(i);
 			
-			Map<Integer, Double> map = Utils.getGoodUserMap(thread_eva.evals, thread_be.behaviors);
+			Map<Integer, Double> map = Utils.getGoodUserMap(evalList, uList);
 			
 			double p = 0;
 			for (Integer u : map.keySet()) {
@@ -353,112 +302,6 @@ public class RecommendServiceImpl implements RecommendService{
     	
     	return result;
     }
-    
-    
-    public class LocalThread_getPIB extends Thread{
-    	List<Integer> items;
-    	int uid;
-    	public LocalThread_getPIB(int uid) {
-			// TODO Auto-generated constructor stub
-    		this.uid = uid;
-		}
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		items = getP_itemBased(uid);
-    	}
-    }
-    
-    public class LocalThread_getPUB extends Thread{
-    	List<Integer> users;
-    	int uid;
-    	public LocalThread_getPUB(int uid) {
-			// TODO Auto-generated constructor stub
-    		this.uid = uid;
-		}
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		users = getP_userBased(uid);
-    	}
-    }
-    
-    public class LocalThread_getTop extends Thread{
-    	List<Integer> tops;
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		tops = recommendMapper.getTopEvaluation();
-    	}
-    }
-    
-    public class LocalThread_getEvaByUid extends Thread{
-    	List<EvalDetail> evalDetails;
-    	int uid;
-    	
-    	public LocalThread_getEvaByUid(int uid) {
-			// TODO Auto-generated constructor stub
-    		this.uid = uid;
-		}
-    	
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		evalDetails = recommendMapper.getAllEvaluationByUid(uid);
-    	}
-    }
-    
-    public class LocalThread_getBeByUid extends Thread{
-    	List<UserBehavior> behaviors;
-    	int uid;
-    	
-    	public LocalThread_getBeByUid(int uid) {
-			// TODO Auto-generated constructor stub
-    		this.uid = uid;
-		}
-    	
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		behaviors = userBehaviorMapper.getScoreByUid(uid);
-    	}
-    }
-    
-    public class LocalThread_getBeByGid extends Thread{
-    	List<UserBehavior> behaviors;
-    	int gid;
-    	
-    	public LocalThread_getBeByGid(int gid) {
-			// TODO Auto-generated constructor stub
-    		this.gid = gid;
-		}
-    	
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		behaviors = userBehaviorMapper.getScoreByGid(gid);
-    	}
-    }
-    
-    public class LocalThread_getEvaByGid extends Thread{
-    	List<EvalDetail> evals;
-    	int gid;
-    	public LocalThread_getEvaByGid(int gid) {
-			// TODO Auto-generated constructor stub
-    		this.gid = gid;
-		}
-    	
-    	@Override
-    	public void run() {
-    		// TODO Auto-generated method stub
-//    		super.run();
-    		evals = recommendMapper.getAllEvaluationByGid(gid);
-    	}
-    }
+
+	
 }
